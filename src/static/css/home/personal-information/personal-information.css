@@ -1,0 +1,83 @@
+.hello {
+    width: 100%;
+    height: 150px;
+    background-image: linear-gradient(to right top, #f082d8, #ed83d9, #ea85d9, #e886da, #e587da, #e388dc, #e088dd, #de89df, #db8ae3, #d98be8, #d58dec, #d28ef0);
+    border-radius: 25px;
+    box-shadow: -10px 20px 80px rgba(0, 0, 0, 0.2);
+}
+
+.hello h1 {
+    padding-left: 60px;
+    padding-top: 25px;
+    color: rgba(255, 255, 255, .8);
+}
+
+.hello p {
+    padding-left: 60px;
+    line-height: 10px;
+    color: rgba(255, 255, 255, .8);
+}
+
+.doughnut {
+    position: absolute;
+    left: 65%;
+    top: -70px;
+}
+
+.today {
+    margin-top: 50px;
+    width: 100%;
+    height: 600px;
+    color: rgba(255, 255, 255, .8);
+}
+
+.order {
+    width: 100%;
+    height: 300px;
+    background-color: rgba(195, 122, 199, .5);
+    border-radius: 25px;
+    box-shadow: -10px 20px 80px rgba(0, 0, 0, 0.2);
+}
+
+
+.order p {
+    color: rgba(255, 255, 255, 1);
+    padding-left: 20px;
+    padding-top: 20px;
+}
+
+.el-timeline-item__timestamp {
+    color: #fff;
+}
+
+.order h3 {
+    color: #fff;
+}
+
+.timeline {
+    padding-right: 40px;
+}
+
+.income,.newUser,.view {
+    float: left;
+    width: 30%;
+    height: 200px;
+    background-color: rgba(195, 122, 199, .5);
+    margin-top: 50px;
+    margin-right: 5%;
+    border-radius: 25px;
+    box-shadow: -10px 20px 80px rgba(0, 0, 0, 0.2);
+}
+.view {
+    margin-right: 0;
+}
+
+.todayFoot h2{
+    padding-left: 20px;
+}
+
+.todayFoot h1 {
+    padding-top: 25px;
+    padding-right: 20px;
+    text-align: right;
+}

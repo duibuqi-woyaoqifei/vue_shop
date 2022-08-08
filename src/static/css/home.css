@@ -1,0 +1,650 @@
+.home_container {
+  background: #6671cc;
+  background-size: cover;
+  min-height: 100vh;
+  box-sizing: border-box;
+  margin: 0;
+  padding-top: calc(50vh - 6em);
+}
+
+.home_box {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 70%;
+  height: 90%;
+  z-index: 999;
+  border-radius: 30px;
+  box-shadow: -15px 30px 40px rgba(0, 0, 0, 0.4);
+  background-image: linear-gradient(to right top,
+      #d16bcd,
+      #cb71d3,
+      #c476d9,
+      #bd7bde,
+      #b680e2,
+      #ae83e6,
+      #a685ea,
+      #9d88ed,
+      #918af1,
+      #838bf5,
+      #728df8,
+      #5f8ffb);
+}
+
+.left_content_box {
+  position: absolute;
+  width: 70%;
+  height: 100%;
+  overflow: hidden;
+  border-radius: 30px 80px 80px 30px;
+  box-shadow: 10px -20px 50px rgba(0, 0, 0, 0.4);
+  background-image: linear-gradient(to right top,
+      #d84ed2,
+      #d45bd7,
+      #d066dc,
+      #cc71e0,
+      #c97ae3,
+      #c77be6,
+      #c47ce9,
+      #c27dec,
+      #c076f0,
+      #bd6ef3,
+      #ba67f7,
+      #b75ffb);
+}
+
+.el-menu-vertical-demo:not(.el-menu--collapse) {
+  width: 200px;
+  min-height: 400px;
+}
+
+.nav {
+  position: absolute;
+  top: 140px;
+  left: 20px;
+  z-index: 99999;
+}
+
+.back {
+  position: absolute;
+  top: 30px;
+  right: 30px;
+}
+
+.el-sub-menu {
+  margin: 0 0 30px 0;
+}
+
+.up {
+  position: absolute;
+  left: 38px;
+  top: 40px;
+  font-size: 30px;
+  color: rgba(0, 0, 0, 0.4);
+}
+
+.down {
+  position: absolute;
+  left: 38px;
+  bottom: 40px;
+  font-size: 30px;
+  color: rgba(0, 0, 0, 0.4);
+}
+
+.search_box {
+  position: absolute;
+  left: 140px;
+  top: 40px;
+}
+
+.search_box .el-input__inner {
+  height: 35px;
+  color: rgba(255, 255, 255, .8);
+}
+
+.left_content {
+  position: absolute;
+  top: 120px;
+  left: 140px;
+  width: 80%;
+  height: 80%;
+}
+
+.head_portrait {
+  position: absolute;
+  top: 30px;
+  right: 30px;
+}
+
+.right_content_box {
+  width: 30%;
+  height: 100%;
+  overflow: hidden;
+  position: absolute;
+  right: 0;
+  z-index: -1;
+}
+
+.right_content {
+  position: absolute;
+  left: 50%;
+  top: 100px;
+  transform: translate(-50%);
+  z-index: -1;
+  width: 100%;
+  height: 100%;
+}
+
+.current_time {
+  color: rgba(255, 255, 255, 1);
+  text-align: center;
+  line-height: 20px;
+}
+
+.crumbs {
+  position: absolute;
+  top: 50px;
+  left: 400px;
+}
+
+.crumbs .el-breadcrumb__item:last-child .el-breadcrumb__inner {
+  color: rgba(255, 255, 255, .8)
+}
+
+.clientForm {
+  position: absolute;
+  top: 130px;
+  right: 50px;
+  z-index: 1;
+  opacity: 0;
+}
+
+.submit {
+  margin-right: 20px;
+}
+
+.infinite-list {
+  position: absolute;
+  top: 430px;
+  left: 50%;
+  transform: translate(-50%);
+  height: 520px;
+  width: 90%;
+  padding: 0;
+  list-style: none;
+  overflow: auto;
+}
+
+.infinite-list .infinite-list-item {
+  height: 110px;
+  background: rgba(100, 100, 110, .1);
+  margin: 20px;
+  color: rgba(255, 255, 255, .8);
+  border-radius: 25px;
+  overflow: hidden;
+}
+
+.infinite-list .infinite-list-item+.list-item {
+  margin-top: 10px;
+}
+
+.infinite-list::-webkit-scrollbar {
+  /*滚动条整体样式*/
+  width: 8px;
+  /*高宽分别对应横竖滚动条的尺寸*/
+  height: 0;
+}
+
+.infinite-list::-webkit-scrollbar-thumb {
+  /*滚动条里面小方块*/
+  border-radius: 10px;
+  box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
+  background: rgba(124, 118, 132, 0.5);
+}
+
+.infinite-list::-webkit-scrollbar-track {
+  /*滚动条里面轨道*/
+  display: none;
+}
+
+.infinite-list::-webkit-scrollbar-thumb:hover {
+  background: rgba(124, 118, 132, 0.8);
+}
+
+.clientHead {
+  position: relative;
+  top: 50px;
+  left: 20px;
+  transform: translate(0, -50%);
+}
+
+.ClientInfo {
+  position: relative;
+  left: 100px;
+  top: -45px;
+  line-height: 10px;
+}
+
+.ClientInfo p {
+  font-size: smaller;
+}
+
+.ClientDetail {
+  position: relative;
+  top: -90px;
+  left: 20px;
+  line-height: 30px;
+  width: 380px;
+}
+
+.ClientDetail input {
+  color: rgba(255, 255, 255, .9);
+}
+
+.ClientDetail .el-form-item__label {
+  color: rgba(255, 255, 255, .8);
+  font-size: 16px;
+  line-height: 30px;
+}
+
+.contactTime {
+  position: relative;
+  top: -58px;
+  left: 250px;
+  line-height: 10px;
+  width: 60px;
+  height: 50px;
+  text-align: right;
+}
+
+.showClientDetail {
+  position: relative;
+  left: 50%;
+  bottom: 390px;
+  transform: translate(-50%) rotate(180deg);
+  width: 30px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.showClientDetail:hover {
+  cursor: pointer;
+  color: rgba(255, 255, 255, .4);
+}
+
+.showClientDetail .ico {
+  position: absolute;
+  width: 30px;
+  height: 20px;
+}
+
+
+@keyframes CW {
+  from {
+    transform: translate(-50%) rotateZ(0deg);
+    bottom: 90px
+  }
+
+  to {
+    transform: translate(-50%) rotateZ(180deg);
+    bottom: 390px
+  }
+}
+
+@keyframes CCW {
+  from {
+    transform: translate(-50%) rotateZ(180deg);
+    bottom: 390px
+  }
+
+  to {
+    transform: translate(-50%) rotateZ(0deg);
+    bottom: 90px
+  }
+}
+
+@keyframes Dfold {
+  from {
+    height: 420px;
+    transform: translate(20px);
+  }
+
+  to {
+    height: 110px;
+    transform: translate(20px);
+  }
+}
+
+@keyframes Dunfold {
+  from {
+    height: 110px;
+    transform: translate(20px);
+  }
+
+  to {
+    height: 420px;
+    transform: translate(20px);
+  }
+}
+
+@keyframes Efold {
+  from {
+    transform: translate(20px);
+    height: 420px;
+  }
+
+  to {
+    transform: translate(0);
+    height: 110px;
+  }
+}
+
+@keyframes Eunfold {
+  from {
+    height: 110px;
+    transform: translate(0);
+
+  }
+
+  to {
+    transform: translate(20px);
+    height: 420px;
+  }
+}
+
+@keyframes Eunfold2 {
+  from {
+    height: 420px;
+    transform: translate(0);
+
+  }
+
+  to {
+    transform: translate(20px);
+    height: 420px;
+  }
+}
+
+@keyframes fold {
+  from {
+    height: 420px;
+  }
+
+  to {
+    height: 110px;
+  }
+}
+
+@keyframes unfold {
+  from {
+    height: 110px;
+  }
+
+  to {
+    height: 420px;
+  }
+}
+
+@keyframes right {
+  from {
+    transform: translate(0);
+  }
+
+  to {
+    transform: translate(20px);
+  }
+}
+
+@keyframes right2 {
+  from {
+    height: 420px;
+    transform: translate(0);
+  }
+
+  to {
+    height: 420px;
+    transform: translate(20px);
+  }
+}
+
+@keyframes left {
+  from {
+    transform: translate(20px);
+  }
+
+  to {
+    transform: translate(0);
+  }
+}
+
+@keyframes left2 {
+  from {
+    height: 420px;
+    transform: translate(20px);
+  }
+
+  to {
+    height: 420px;
+    transform: translate(0);
+  }
+}
+
+@keyframes clear {
+  from {
+    transform: translate(0);
+    opacity: 1;
+    display: block;
+  }
+
+  to {
+    transform: translate(400px);
+    opacity: 0;
+    display: none;
+  }
+}
+
+@keyframes clear2 {
+  from {
+    height: 420px;
+    transform: translate(0);
+    opacity: 1;
+    display: block;
+  }
+
+  to {
+    height: 420px;
+    transform: translate(400px);
+    opacity: 0;
+    display: none;
+  }
+}
+
+@keyframes back {
+  from {
+    transform: translate(400px);
+    opacity: 0;
+    display: none;
+  }
+
+  to {
+    transform: translate(0);
+    opacity: 1;
+    display: block;
+  }
+}
+
+@keyframes back2 {
+  from {
+    height: 420px;
+    transform: translate(400px);
+    opacity: 0;
+    display: none;
+  }
+
+  to {
+    height: 420px;
+    transform: translate(0);
+    opacity: 1;
+    display: block;
+  }
+}
+
+@keyframes disappear {
+  from {
+    opacity: 1;
+
+  }
+
+  to {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+@keyframes disappear2 {
+  from {
+    opacity: 1;
+    bottom: 90px;
+    transform: translate(-50%) rotateZ(0deg);
+  }
+
+  to {
+    bottom: 90px;
+    opacity: 0;
+    visibility: hidden;
+    transform: translate(-50%) rotateZ(0deg);
+  }
+}
+
+@keyframes appear {
+  from {
+    opacity: 0;
+
+  }
+
+  to {
+    opacity: 1;
+    visibility: visible;
+  }
+}
+
+@keyframes reset {
+  from {}
+
+  to {
+    height: 110px;
+    transform: translate(0);
+  }
+}
+
+.setName {
+  width: 100px;
+}
+
+.deleteClient {
+  position: absolute;
+  top: 100px;
+  left: 50%;
+  transform: translate(-50%);
+}
+
+.el-button+.el-button {
+  margin-left: 0;
+}
+
+.function {
+  width: 100px;
+  height: 300px;
+  position: relative;
+  top: 30px;
+  left: 50%;
+  transform: translate(-50%);
+
+}
+
+.addClient {
+  position: absolute;
+  top: 30px;
+  left: 50%;
+  transform: translate(-50%);
+}
+
+.fn {
+  position: relative;
+  top: 65px;
+  left: 5px;
+}
+
+.fn:hover {
+  cursor: pointer;
+  color: rgba(0, 0, 0, 0.4);
+}
+
+.confirmFn {
+  position: absolute;
+  bottom: 140px;
+  right: 100px;
+}
+
+.cancelFn {
+  position: absolute;
+  bottom: 140px;
+  right: 40px;
+}
+
+.function-list {
+  position: relative;
+  height: 0px;
+  width: 0px;
+}
+
+.editClient {
+  position: absolute;
+  top: 170px;
+  left: 50%;
+  transform: translate(-50%);
+}
+
+.detail {
+  width: 220px;
+}
+
+.searchClient {
+  position: absolute;
+  top: 240px;
+  left: 50%;
+  transform: translate(-50%);
+}
+
+
+.searchClientBox {
+  position: absolute;
+  top: 378px;
+  left: 50%;
+  transform: translate(-50%);
+  width: 380px;
+}
+
+.searchClientBox .el-input__inner {
+  width: 300px;
+  height: 40px;
+  color: rgba(255, 255, 255, .8);
+}
+
+.closeSearch {
+  position: relative;
+  left: 20px;
+}
+.closeSearch .ico {
+  position: absolute;
+  width: 22px;
+  height: 22px;
+  color: rgba(255, 255, 255, .8);
+}
+.closeSearch .ico:hover {
+  cursor: pointer;
+  color: rgba(255, 255, 255, .4);
+}

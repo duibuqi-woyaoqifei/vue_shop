@@ -1,0 +1,60 @@
+.userSearchAdd {
+    position: relative;
+    top: 20px;
+}
+
+.userListTable {
+    position: relative;
+    top: 80px;
+}
+
+/* 表内样式 */
+.userListTable .el-table {
+    --el-table-header-bg-color: rgba(0, 0, 0, .05);
+    color: rgba(255, 255, 255, 1);
+    font-size: 14px;
+}
+
+/* 表头样式 */
+.userListTable .el-table thead {
+    color: rgba(255, 255, 255, .7);
+    font-size: 18px;
+    letter-spacing: 8px;
+}
+
+/* 无数据时的样式 */
+.userListTable .el-table__empty-text {
+    color: rgba(255, 255, 255, .7);
+}
+
+/* 开关为true时的样式 */
+.userListTable .el-switch.is-checked .el-switch__core {
+    background-color: #5EC279;
+    border-color: #5EC279;
+}
+
+/* element表格列自定义鼠标经过颜色变换 */
+.el-table--enable-row-hover .el-table__body tr:hover>td {
+    background-color: rgba(0, 0, 0, .05) !important;
+}
+
+
+.userListPagination {
+    position: relative;
+    top: 40px;
+    left: 70px;
+}
+
+/* 分页样式 */
+.userListPagination .el-pagination {
+    color: rgba(255, 255, 255, 1);
+}
+
+.userListPagination {
+    --el-text-color-regular: rgba(255, 255, 255, .8);
+}
+
+.warningIcon {
+    position: relative;
+    top: 4px;
+}

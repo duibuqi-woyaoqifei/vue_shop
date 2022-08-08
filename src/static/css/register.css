@@ -1,0 +1,130 @@
+.register_container {
+    position: absolute;
+    background-image: linear-gradient(to right top,
+            #d16bc4,
+            #c279d3,
+            #b186dd,
+            #a192e4,
+            #939ce7,
+            #84a6ee,
+            #76b0f2,
+            #6ab9f4,
+            #51c5f9,
+            #38d1f9,
+            #26dcf6,
+            #2fe6ee);
+    height: 100%;
+    width: 100%;
+}
+
+.register_box {
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    top: 50%;
+    width: 450px;
+    height: 380px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
+}
+
+.register_title {
+    position: absolute;
+    width: 100%;
+    text-align: center;
+    top: -100px;
+    color: rgba(101, 100, 113, 0.8);
+    font-weight: normal;
+}
+
+.register_button {
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    bottom: 0;
+    width: 180px;
+    height: 50px;
+    background-color: rgba(134, 168, 231, 1);
+    border: none;
+    border-radius: 15px;
+    font-size: 16px;
+    color: rgba(101, 100, 113, 0.8);
+}
+
+.register_button:hover {
+    background-color: rgba(134, 168, 231, 0.5);
+    color: rgba(101, 100, 113, 0.5);
+}
+
+.username {
+    position: absolute;
+    top: 60px;
+    width: 100%;
+    padding: 0 30px;
+    box-sizing: border-box;
+}
+
+.password {
+    position: absolute;
+    top: 140px;
+    width: 100%;
+    padding: 0 30px;
+    box-sizing: border-box;
+}
+
+.RememberMe {
+    position: absolute;
+    bottom: -50px;
+}
+
+:root {
+    --el-color-primary: rgba(101, 100, 113, 0.8);
+    --el-fill-color-blank: rgba(0, 0, 0, 0);
+}
+
+input[type=checkbox] {
+    zoom: 300%;
+}
+
+.register {
+    position: absolute;
+    right: 0;
+    bottom: -50px;
+    width: 80px;
+}
+.el-button.is-text:hover {
+    background-color: #000;
+}
+.el-button--primary {
+    --el-button-bg-color:rgba(134, 168, 231, 1);
+    --el-button-border-color:rgba(0,0,0,0.1);
+    border-radius: 5px;
+    --el-button-text-color:rgba(101, 100, 113, 1);
+    --el-button-hover-text-color:rgba(101, 100, 113, 0.5);
+    --el-button-hover-bg-color:rgba(255, 255, 255, 0.1);
+}
+.register:hover {
+    background-color: rgba(134, 168, 231, 0.5);
+
+}
+.register {
+    border: none;
+}
+.password_again {
+    position: absolute;
+    top: 220px;
+    width: 100%;
+    padding: 0 30px;
+    box-sizing: border-box;
+}
+.register_box .el-input__inner {
+    background-color: rgba(134, 168, 231, 1);
+    text-align: center;
+    height: 41px;
+    padding-right: 30px;
+}
+
+.register_box .el-input__wrapper {
+    background-color: rgba(134, 168, 231, 1);
+    box-shadow: 0 0 0 0;
+}
