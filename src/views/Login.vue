@@ -62,7 +62,7 @@
 <script>
 import { ref, reactive, onMounted, onBeforeUpdate, computed } from "vue";
 import { useRouter } from "vue-router";
-import axios from "axios";
+import axios from "../plugnis/axios";
 
 export default {
   setup() {
@@ -93,9 +93,9 @@ export default {
             });
           // 请求登录接口
           await axios
-            .get("http://127.0.0.1:3000/accountlist")
+            .get(axios.baseURL + "/accountlist")
             .then((data) => {
-              for (var i of data.data) {
+              for (let i of data) {
                 if (i.username === login_form.username) {
                   if (i.password === login_form.password) {
                     // 是否保存用户名密码
@@ -117,12 +117,12 @@ export default {
                     // 获取token
                     axios
                       .post(
-                        "http://127.0.0.1:3000/token",
+                        axios.baseURL + "/token",
                         JSON.stringify(login_form.username)
                       )
                       .then((data) => {
                         // 保存token
-                        window.localStorage.setItem("token", data.data);
+                        window.localStorage.setItem("token", data);
                         // 记录当前用户
                         if (!window.localStorage.getItem("currentUsername")) {
                           window.localStorage.setItem(
@@ -145,7 +145,6 @@ export default {
                           type: "error",
                           showClose: true,
                         });
-                        console.log(err);
                       });
                     return;
                   }
@@ -163,7 +162,6 @@ export default {
                 type: "error",
                 showClose: true,
               });
-              console.log(err);
             });
         });
       },
@@ -171,27 +169,14 @@ export default {
 
     // 生命周期函数
     onMounted(() => {
-      // 更新数据库
-      axios
-        .get("http://127.0.0.1:3000/accountlist")
-        .then((data) => {})
-        .catch((err) => {
-          ElMessage({
-            message: "请求错误！",
-            type: "error",
-            showClose: true,
-          });
-          console.log(err);
-        });
-
       // 校验token
       axios
         .post(
-          "http://127.0.0.1:3000/token",
+          axios.baseURL + "/token",
           JSON.stringify(window.localStorage.getItem("token"))
         )
         .then((data) => {
-          if (data.data.verify === true) {
+          if (data.verify === true) {
             router.push({
               name: "我的信息",
               path: "/home/personal-information",
@@ -204,7 +189,6 @@ export default {
             type: "error",
             showClose: true,
           });
-          console.log(err);
         });
 
       // 是否有默认用户名密码

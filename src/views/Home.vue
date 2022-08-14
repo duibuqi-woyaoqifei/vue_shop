@@ -40,10 +40,10 @@
               </template>
               <el-menu-item-group>
                 <template #title><span>权限</span></template>
-                <el-menu-item index="/home/user-permission"
-                  >用户权限</el-menu-item
+                <el-menu-item index="/home/role-list">角色列表</el-menu-item>
+                <el-menu-item index="/home/permission-list"
+                  >权限列表</el-menu-item
                 >
-                <el-menu-item index="2-2">权限等级</el-menu-item>
               </el-menu-item-group>
               <el-menu-item-group title="用户管理">
                 <el-menu-item index="/home/user-list">用户列表</el-menu-item>
@@ -650,7 +650,7 @@ export default {
           }
           await axios
             .post(
-              "http://127.0.0.1:3000/client/set",
+              axios.baseURL + "/client/set",
               JSON.stringify({
                 currentUsername: window.localStorage.getItem("currentUsername"),
                 name: clientForm.name,
@@ -883,7 +883,7 @@ export default {
         if (pendingdeleteArr.value.length === 0) return this.cancelDelete();
         axios
           .post(
-            "http://127.0.0.1:3000/client/set",
+            axios.baseURL + "/client/set",
             JSON.stringify({
               currentUsername: window.localStorage.getItem("currentUsername"),
               names: pendingdeleteArr.value.join(","),
@@ -969,7 +969,7 @@ export default {
           // 请求客户信息修改接口
           await axios
             .post(
-              "http://127.0.0.1:3000/client/set",
+              axios.baseURL + "/client/set",
               JSON.stringify({
                 currentUsername: window.localStorage.getItem("currentUsername"),
                 nameOld: newClient.姓名,
@@ -1079,7 +1079,7 @@ export default {
             // 请求客户信息修改接口
             await axios
               .post(
-                "http://127.0.0.1:3000/client/set",
+                axios.baseURL + "/client/set",
                 JSON.stringify({
                   currentUsername:
                     window.localStorage.getItem("currentUsername"),
@@ -1387,9 +1387,9 @@ export default {
           functionBtn[0].style.animation = "appear 0.15s forwards";
         }, 150);
       },
-      selectClient(item){
-        methods.querySearch2(item.name,()=>{})
-      }
+      selectClient(item) {
+        methods.querySearch2(item.name, () => {});
+      },
     });
 
     // 搜索框信息过滤
@@ -1541,7 +1541,7 @@ export default {
       function getMysqlClient() {
         axios
           .post(
-            "http://127.0.0.1:3000/client",
+            axios.baseURL + "/client",
             JSON.stringify(window.localStorage.getItem("currentUsername"))
           )
           .then((data) => {

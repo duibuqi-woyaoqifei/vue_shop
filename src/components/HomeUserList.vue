@@ -43,18 +43,21 @@
       </el-form-item>
       <el-form-item label="角色" prop="role">
         <el-select v-model="addUserForm.role" placeholder="请选择角色类别">
-          <el-option label="管理员" value="管理员" />
-          <el-option label="超级管理员" value="超级管理员" />
-          <el-option label="主管" value="主管" />
+          <el-option
+            v-for="(item, index) in roleList"
+            :key="index"
+            :label="item.name"
+            :value="item.name"
+          ></el-option>
         </el-select>
       </el-form-item>
     </el-form>
     <template #footer>
       <el-row :gutter="10">
-        <el-col :span="22"
+        <el-col :span="21"
           ><el-button @click="AddUserFormCancel">取消</el-button></el-col
         >
-        <el-col :span="2"
+        <el-col :span="3"
           ><el-button type="primary" @click="AddUserFormSubmit"
             >确认</el-button
           ></el-col
@@ -64,7 +67,11 @@
   </el-dialog>
 
   <!-- 修改用户信息对话框 -->
-  <el-dialog v-model="showEditUserDialog" title="修改用户信息">
+  <el-dialog
+    v-model="showEditUserDialog"
+    title="修改用户信息"
+    @close="EditUserFormCancel"
+  >
     <el-form
       :model="editUserForm"
       ref="editUserFormRef"
@@ -83,10 +90,10 @@
     </el-form>
     <template #footer>
       <el-row :gutter="10">
-        <el-col :span="22"
+        <el-col :span="21"
           ><el-button @click="EditUserFormCancel">取消</el-button></el-col
         >
-        <el-col :span="2"
+        <el-col :span="3"
           ><el-button type="primary" @click="EditUserFormSubmit"
             >确认</el-button
           ></el-col
@@ -96,18 +103,56 @@
   </el-dialog>
 
   <!-- 删除用户对话框 -->
-  <el-dialog v-model="showDeleteUserDialog" title="提示">
+  <el-dialog
+    v-model="showDeleteUserDialog"
+    title="提示"
+    @close="DeleteUserCancel"
+  >
     <el-icon color="#E59661" size="large" class="warningIcon"
       ><WarningFilled
     /></el-icon>
     <span> 此操作将永久删除该用户，是否继续？</span>
     <template #footer>
       <el-row :gutter="10">
-        <el-col :span="22"
+        <el-col :span="21"
           ><el-button @click="DeleteUserCancel">取消</el-button></el-col
         >
-        <el-col :span="2"
+        <el-col :span="3"
           ><el-button type="primary" @click="DeleteUserSubmit"
+            >确认</el-button
+          ></el-col
+        >
+      </el-row>
+    </template>
+  </el-dialog>
+
+  <!-- 分配角色对话框 -->
+  <el-dialog
+    v-model="showAssignRoleDialog"
+    title="提示"
+    @close="AssignRoleCancel"
+  >
+    <p>用户：{{ clone.name }}</p>
+    <p>当前用户的角色：{{ clone.role }}</p>
+    <p>
+      分配新角色：
+      <el-select v-model="editUserForm.role" placeholder="请选择角色类别">
+        <el-option
+          v-for="(item, index) in roleList"
+          :key="index"
+          :label="item.name"
+          :value="item.name"
+        ></el-option>
+      </el-select>
+    </p>
+
+    <template #footer>
+      <el-row :gutter="10">
+        <el-col :span="21"
+          ><el-button @click="AssignRoleCancel">取消</el-button></el-col
+        >
+        <el-col :span="3"
+          ><el-button type="primary" @click="AssignRoleSubmit"
             >确认</el-button
           ></el-col
         >
@@ -147,7 +192,11 @@
               @click="DeleteUser(scope.row)"
             />
             <el-tooltip content="分配角色" placement="top" :enterable="false">
-              <el-button type="warning" icon="Setting" />
+              <el-button
+                type="warning"
+                icon="Setting"
+                @click="AssignRole(scope.row)"
+              />
             </el-tooltip>
           </el-button-group>
         </template>
@@ -177,18 +226,20 @@ import {
   validateEmail,
   validatePhone,
 } from "../plugnis/ValidateRules";
-import IsEdit from "../plugnis/isEdit";
+import { IsEdit } from "../plugnis/function";
+import { ReqRoleList } from "../request/Req";
 
 // 数据
-const addUserFormRef = ref(null);
 const currentUsername = window.localStorage.getItem("currentUsername"); //当前账号名
-const editUserFormRef = ref(null);
+const roleList = ref([]); // 角色列表
 const showAddUserDialog = ref(false); //添加用户对话框
+const showAssignRoleDialog = ref(false); // 分配角色对话框
 const showDeleteUserDialog = ref(false); //删除用户对话框
 const showEditUserDialog = ref(false); //修改用户信息对话框
 const userListTotal = ref(0); //用户总数
 const userList = ref([]); //用户列表渲染
 // 添加用户表单信息
+const addUserFormRef = ref(null);
 const addUserForm = reactive({
   name: "",
   password: "",
@@ -203,10 +254,12 @@ const deleteUserForm = reactive({
   index: 0,
 });
 // 修改用户表单
+const editUserFormRef = ref(null);
 const editUserForm = reactive({
   name: "",
   email: "",
   phone: "",
+  role: "",
   index: 0,
 });
 // 用户列表请求信息
@@ -234,7 +287,7 @@ const editUserFormRules = reactive({
 // 访问用户列表
 const reqUserList = () => {
   axios
-    .post("http://127.0.0.1:3000/userList", JSON.stringify(userListReqInfo))
+    .post(axios.baseURL + "/userList", JSON.stringify(userListReqInfo))
     .then((data) => {
       userList.value = data;
     })
@@ -249,10 +302,7 @@ const reqUserList = () => {
 // 更新用户列表
 const setUserList = (pendingUpdateData) => {
   axios
-    .post(
-      "http://127.0.0.1:3000/userList/set",
-      JSON.stringify(pendingUpdateData)
-    )
+    .post(axios.baseURL + "/userList/set", JSON.stringify(pendingUpdateData))
     .then((data) => {
       if (data === "Succeeded in modifying the status") {
         ElMessage({
@@ -277,6 +327,7 @@ const setUserList = (pendingUpdateData) => {
           showClose: true,
         });
         showEditUserDialog.value = false;
+        showAssignRoleDialog.value = false;
         reqUserList();
       }
       if (data === "Delete user successfully") {
@@ -310,7 +361,7 @@ const DialogCancel = (dialogSwitch, formRef) => {
 };
 // 对话框确认操作 DialogSubmit(表单信息,操作名称,表单ref对象)
 const DialogSubmit = (formInfo, operation, formRef) => {
-  if (operation === "deleteUser") {
+  if (formRef === undefined) {
     const pendingDeleteData = {
       operation,
       ...formInfo,
@@ -357,6 +408,13 @@ const DeleteUserCancel = () => {
 const DeleteUserSubmit = () => {
   DialogSubmit(deleteUserForm, "deleteUser");
 };
+// 分配角色对话框
+const AssignRoleCancel = () => {
+  DialogCancel(showAssignRoleDialog);
+};
+const AssignRoleSubmit = () => {
+  DialogSubmit(editUserForm, "assignRole");
+};
 
 // 表格
 const EditUserInfo = (data) => {
@@ -381,6 +439,13 @@ const UserStateChange = (changeObj) => {
   };
   setUserList(pendingUpdateData);
 };
+const AssignRole = (data) => {
+  for (let i in editUserForm) {
+    editUserForm[i] = data[i];
+    clone[i] = data[i];
+  }
+  showAssignRoleDialog.value = true;
+};
 
 // 分页
 const CurrentPageChange = (newPage) => {
@@ -395,6 +460,7 @@ const EachPageSizeChange = (newSize) => {
 // 生命周期
 onMounted(() => {
   reqUserList();
+  ReqRoleList(roleList);
 });
 </script>
 

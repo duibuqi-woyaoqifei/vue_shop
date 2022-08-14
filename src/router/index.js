@@ -6,8 +6,10 @@ import Register from '../views/Register'
 // Home嵌套路由
 import HomePersonalInformation from '../components/HomePersonalInformation'
 import HomePlan from '../components/HomePlan'
-import HomeUserPermission from '../components/HomeUserPermission'
+import HomeRoleList from '../components/HomeRoleList'
+import HomePermissionList from '../components/HomePermissionList'
 import HomeUserList from '../components/HomeUserList'
+// 路由守卫使用
 import axios from 'axios'
 import { ElMessage } from 'element-plus'
 
@@ -23,7 +25,9 @@ const routes = [
     }, {
       path: 'plan', name: "计划", component: HomePlan
     }, {
-      path: 'user-permission', name: "用户权限", component: HomeUserPermission
+      path: 'role-list', name: "角色列表", component: HomeRoleList
+    }, {
+      path: 'permission-list', name: "权限列表", component: HomePermissionList
     }, {
       path: 'user-list', name: "用户列表", component: HomeUserList
     },]

@@ -1,0 +1,23 @@
+.permissionListTable {
+    position: relative;
+    top: 20px;
+}
+
+/* 表内样式 */
+.permissionListTable .el-table {
+    --el-table-header-bg-color: rgba(0, 0, 0, .05);
+    color: rgba(255, 255, 255, 1);
+    font-size: 14px;
+}
+
+/* 表头样式 */
+.permissionListTable .el-table thead {
+    color: rgba(255, 255, 255, .7);
+    font-size: 18px;
+    letter-spacing: 8px;
+}
+
+/* 无数据时的样式 */
+.permissionListTable .el-table__empty-text {
+    color: rgba(255, 255, 255, .7);
+}

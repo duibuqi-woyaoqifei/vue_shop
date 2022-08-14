@@ -1,0 +1,36 @@
+.cardView {
+    position: relative;
+    top: 20px;
+    height: 900px;
+}
+
+.roleListTable {
+    position: relative;
+    top: 10px;
+    height: 800px;
+}
+
+.permissionTag {
+    position: relative;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    margin-left: 50px;
+}
+
+.roleRowCenter {
+    display: flex;
+}
+
+.verticalCenter {
+    align-self: center;
+}
+
+.dialogBtn {
+    position: relative;
+    top: 10px;
+    left: -111px;
+}
+
+.el-table__expand-icon>.el-icon {
+    color: #000;
+}

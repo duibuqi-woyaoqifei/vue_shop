@@ -77,7 +77,7 @@
 import { ref, reactive, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import { ElMessage } from "element-plus";
-import axios from "axios";
+import axios from "../plugnis/axios";
 export default {
   setup() {
     // 数据
@@ -108,7 +108,7 @@ export default {
             });
           await axios
             .post(
-              "http://127.0.0.1:3000/accountlist/set",
+              axios.baseURL + "/accountlist/set",
               JSON.stringify({
                 username: register_form.username,
                 password: register_form.password,
@@ -142,9 +142,9 @@ export default {
     // 生命周期函数
     onMounted(() => {
       axios
-        .get("http://127.0.0.1:3000/accountlist")
+        .get(axios.baseURL + "/accountlist")
         .then((data) => {
-          for (let i of data.data) {
+          for (let i of data) {
             mysqlUsername.push(i["username"]);
           }
         })
