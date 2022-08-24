@@ -1,4 +1,5 @@
 import axios from "../plugnis/axios"
+import { InitialConvertCase } from "../plugnis/function";
 
 // 访问角色列表
 const ReqRoleList = (roleList) => {
@@ -83,23 +84,88 @@ const ReqRoleList = (roleList) => {
         });
 };
 
-// 访问权限列表
-const ReqPermissionList = (permissionList) => {
-    axios
-        .get(axios.baseURL + "/permissionList")
-        .then((data) => {
-            for (let i in data) {
-                permissionList.value.push(data[i]);
-            }
-        })
-        .catch((err) => {
-            ElMessage({
-                message: "请求超时！",
-                type: "error",
-                showClose: true,
+
+// 相同请求
+const reqList = ["PermissionList", "CommodityClassification"];
+let Reqs = {}
+for (let item of reqList) {
+    let reqName = "Req" + item;
+    let lower = InitialConvertCase(item);
+    Reqs[reqName] = (list, list2) => {
+        axios
+            .get(axios.baseURL + "/" + lower)
+            .then((data) => {
+                if (item === "CommodityClassification") {
+                    list2.value = (JSON.parse(JSON.stringify(data)))
+                    const DeepForEach = (obj) => {
+                        for (let i in obj) {
+                            if (i === "level") {
+                                if (obj[i] === 1) {
+                                    delete obj.children
+                                }
+                            }
+                            if (typeof obj[i] === "object") {
+                                DeepForEach(obj[i]);
+                            }
+                        }
+                    };
+                    DeepForEach(list2.value)
+                }
+                list.value = data
+            })
+            .catch((err) => {
+                ElMessage({
+                    message: "请求超时！",
+                    type: "error",
+                    showClose: true,
+                });
             });
-        });
-};
+    };
+}
+
+let Sets = {}
+for (let item of reqList) {
+    let reqName = "Set" + item;
+    let lower = InitialConvertCase(item);
+    Sets[reqName] = (requestContent) => {
+        axios
+            .post(axios.baseURL + "/" + lower + "/set", JSON.stringify(requestContent.pendingUpdateData))
+            .then((data) => {
+                if (data === "Added successfully") {
+                    ElMessage({
+                        message: "添加成功！",
+                        type: "success",
+                        showClose: true,
+                    });
+                }
+                if (data === "Modified successfully") {
+                    ElMessage({
+                        message: "修改成功！",
+                        type: "success",
+                        showClose: true,
+                    });
+                }
+                if (data === "Deleted successfully") {
+                    ElMessage({
+                        message: "删除成功！",
+                        type: "success",
+                        showClose: true,
+                    });
+                }
+                requestContent.req.Reqs(requestContent.req.commodityClassificationList, requestContent.req.commodityClassificationListOptions)
+
+            })
+            .catch((err) => {
+                ElMessage({
+                    message: "请求超时！",
+                    type: "error",
+                    showClose: true,
+                });
+            });
+    }
+}
 
 
-export { ReqRoleList, ReqPermissionList }
+export { ReqRoleList, Reqs, Sets }
+
+

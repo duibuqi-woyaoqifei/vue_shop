@@ -57,8 +57,10 @@
               </template>
               <el-menu-item-group>
                 <template #title><span>商品</span></template>
-                <el-menu-item index="3-1">商品列表</el-menu-item>
-                <el-menu-item index="3-2">商品分类</el-menu-item>
+                <el-menu-item index="/home/product-list">商品列表</el-menu-item>
+                <el-menu-item index="/home/commodity-classification"
+                  >商品分类</el-menu-item
+                >
                 <el-menu-item index="3-3">商品参数设置</el-menu-item>
               </el-menu-item-group>
             </el-sub-menu>

@@ -12,13 +12,15 @@
       </el-input>
     </el-col>
     <el-col :span="4">
-      <el-button color="#715B8B" @click="showAddUserDialog = true"
-        >添加用户</el-button
-      >
+      <el-button color="#715B8B" @click="AddUser">添加用户</el-button>
     </el-col>
   </el-row>
   <!-- 添加用户对话框 -->
-  <el-dialog v-model="showAddUserDialog" title="添加用户">
+  <el-dialog
+    v-model="showAddUserDialog"
+    title="添加用户"
+    @close="AddUserFormCancel"
+  >
     <el-form
       :model="addUserForm"
       ref="addUserFormRef"
@@ -236,6 +238,7 @@ const showAddUserDialog = ref(false); //添加用户对话框
 const showAssignRoleDialog = ref(false); // 分配角色对话框
 const showDeleteUserDialog = ref(false); //删除用户对话框
 const showEditUserDialog = ref(false); //修改用户信息对话框
+const onOff = ref(true); // 开关
 const userListTotal = ref(0); //用户总数
 const userList = ref([]); //用户列表渲染
 // 添加用户表单信息
@@ -289,7 +292,8 @@ const reqUserList = () => {
   axios
     .post(axios.baseURL + "/userList", JSON.stringify(userListReqInfo))
     .then((data) => {
-      userList.value = data;
+      userList.value = data.userList;
+      userListTotal.value = data.total;
     })
     .catch((err) => {
       ElMessage({
@@ -361,6 +365,11 @@ const DialogCancel = (dialogSwitch, formRef) => {
 };
 // 对话框确认操作 DialogSubmit(表单信息,操作名称,表单ref对象)
 const DialogSubmit = (formInfo, operation, formRef) => {
+  if (!onOff.value) return;
+  onOff.value = false;
+  setTimeout(() => {
+    onOff.value = true;
+  }, 300);
   if (formRef === undefined) {
     const pendingDeleteData = {
       operation,
@@ -417,6 +426,9 @@ const AssignRoleSubmit = () => {
 };
 
 // 表格
+const AddUser = () => {
+  showAddUserDialog.value = true;
+};
 const EditUserInfo = (data) => {
   for (let i in editUserForm) {
     editUserForm[i] = data[i];

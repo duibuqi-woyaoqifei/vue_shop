@@ -231,13 +231,14 @@
 <script setup>
 import { ref, reactive, onMounted } from "vue";
 import axios from "../plugnis/axios";
-import { IsEdit, DepthForEach } from "../plugnis/function";
-import { ReqRoleList, ReqPermissionList } from "../request/Req";
+import { IsEdit } from "../plugnis/function";
+import { Reqs, ReqRoleList } from "../request/Req";
 
 // 数据
 const assignedPermissions = ref([]); // 已分配权限
 const currentUsername = window.localStorage.getItem("currentUsername"); //当前账号名
 const expandRowArr = ref([]); //展开的行
+const onOff = ref(true); // 开关
 const permissionList = ref([]); //权限列表
 const permissionListArr = ref([]); // 权限列表穿梭框版
 const roleList = ref([]); // 角色列表
@@ -362,6 +363,11 @@ const DialogCancel = (dialogSwitch, formRef) => {
 };
 // 对话框确认操作 DialogSubmit(表单信息,操作名称,表单ref对象)
 const DialogSubmit = (formInfo, operation, formRef) => {
+  if (!onOff.value) return;
+  onOff.value = false;
+  setTimeout(() => {
+    onOff.value = true;
+  }, 300);
   if (operation === "deleteRole" || formRef === undefined) {
     const pendingDeleteData = {
       operation,
@@ -559,7 +565,7 @@ const RemovePermission = (tagInfo, allInfo) => {
 
 // 生命周期
 onMounted(() => {
-  ReqPermissionList(permissionList);
+  Reqs.ReqPermissionList(permissionList);
   ReqRoleList(roleList);
 });
 </script>

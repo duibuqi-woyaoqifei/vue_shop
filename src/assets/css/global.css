@@ -6,6 +6,7 @@ body,
     padding: 0;
 }
 
+
 .inputDeep .el-input--medium .el-input__inner {
     border-top: none !important;
     border-left: none !important;
@@ -16,9 +17,6 @@ input::-webkit-input-placeholder {
     color: rgba(101, 100, 113, 0.5) !important;
 }
 
-.el-input__suffix-inner {
-    display: none;
-}
 
 input:focus::-webkit-input-placeholder {
     color: transparent !important;

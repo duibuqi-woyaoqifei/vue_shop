@@ -9,6 +9,9 @@ import HomePlan from '../components/HomePlan'
 import HomeRoleList from '../components/HomeRoleList'
 import HomePermissionList from '../components/HomePermissionList'
 import HomeUserList from '../components/HomeUserList'
+import HomeProductList from "../components/HomeProductList"
+import HomeCommodityClassification from "../components/HomeCommodityClassification"
+
 // 路由守卫使用
 import axios from 'axios'
 import { ElMessage } from 'element-plus'
@@ -30,6 +33,10 @@ const routes = [
       path: 'permission-list', name: "权限列表", component: HomePermissionList
     }, {
       path: 'user-list', name: "用户列表", component: HomeUserList
+    }, {
+      path: 'product-list', name: "商品列表", component: HomeProductList
+    }, {
+      path: 'commodity-classification', name: "商品分类", component: HomeCommodityClassification
     },]
   }
 ]
