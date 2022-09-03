@@ -16,7 +16,7 @@
         :data="commodityClassificationList"
         :props="commodityClassificationProps"
         default-expand-all
-        indent="32"
+        :indent="32"
       >
         <template #default="{ node, data }">
           <span class="treeRow">
@@ -97,6 +97,7 @@ import { Throttle, InitialConvertCase } from "../plugnis/function";
 import { DialogCancel, DialogSubmit } from "../plugnis/dom";
 
 // 数据
+const currentUsername = window.localStorage.getItem("currentUsername"); //当前账号名
 const commodityClassificationList = ref([]); // 商品分类列表
 const commodityClassificationListOptions = ref([]); // 级联选择器数据
 const commodityClassificationCascadeSelectorRef = ref(null); // 级联选择器ref
@@ -120,8 +121,42 @@ const commodityClassificationCascadeSelectorProps = {
 };
 
 //添加商品分类表单校验规则
+const validateClassName = (rule, value, callback) => {
+  if (value === "") {
+    callback(new Error("分类名称不能为空"));
+  }
+  let exists = [];
+  for (let i in commodityClassificationList.value) {
+    if (addClassificationForm.parentName[0] === undefined) {
+      exists.push(commodityClassificationList.value[i].name);
+    } else if (
+      commodityClassificationList.value[i].name ===
+      addClassificationForm.parentName[0]
+    ) {
+      for (let index in commodityClassificationList.value[i].children) {
+        if (addClassificationForm.parentName[1] === undefined) {
+          exists.push(
+            commodityClassificationList.value[i].children[index].name
+          );
+        } else if (
+          commodityClassificationList.value[i].children[index].name ===
+          addClassificationForm.parentName[1]
+        ) {
+          for (let item of commodityClassificationList.value[i].children[index]
+            .children) {
+            exists.push(item.name);
+          }
+        }
+      }
+    }
+  }
+  if (exists.indexOf(value) !== -1) {
+    callback(new Error("已存在此分类"));
+  }
+  callback();
+};
 const addClassificationListFormRules = reactive({
-  name: [{ required: true, message: "分类名称不能为空", trigger: "blur" }],
+  name: [{ required: true, validator: validateClassName, trigger: "blur" }],
 });
 
 // 请求方法
@@ -130,26 +165,32 @@ const addClassificationListFormRules = reactive({
 // 删除某一分类及其所有子分类
 const RemoveClassification = (node, data) => {
   let one = "";
+  let two = "";
   if (data.level === 0) {
     one = data.name;
   }
   if (data.level === 1) {
     one = node.parent.label;
+    two = data.name;
   }
   if (data.level === 2) {
     one = node.parent.parent.label;
+    two = node.parent.label;
   }
   const requestContent = {
     req: {
       Reqs: Reqs.ReqCommodityClassification,
-      commodityClassificationList,
-      commodityClassificationListOptions,
+      list: commodityClassificationList,
+      list2: commodityClassificationListOptions,
+      queryInfo: { currentUsername },
     },
     pendingUpdateData: {
       name: data.name,
       one,
+      two,
       level: data.level,
       operation: "deleteCommodityclassification",
+      currentUsername,
     },
   };
   Sets.SetCommodityClassification(requestContent);
@@ -175,32 +216,46 @@ const CascaderClick = (node, data) => {
 // 添加商品分类对话框取消
 const AddClassificationDialogCancel = () => {
   DialogCancel(showAddClassificationDialog, addClassificationFormRef);
+  setTimeout(() => {
+    commodityClassificationCascadeSelectorRef.value.inputValue = "";
+  }, 300);
 };
 // 提交
 const AddClassificationDialogSubmit = () => {
-  if (addClassificationForm.parentName) {
-    addClassificationForm.parentName =
-      addClassificationForm.parentName.join(",");
-  }
-  DialogSubmit(
-    addClassificationForm,
-    "addCommodityclassification",
-    {
+  addClassificationFormRef.value.validate(async (isValid) => {
+    if (!isValid) {
+      return ElMessage({
+        message: "信息填写错误！",
+        type: "error",
+        showClose: true,
+      });
+    }
+    if (addClassificationForm.parentName) {
+      addClassificationForm.parentName =
+        addClassificationForm.parentName.join(",");
+    }
+    await DialogSubmit(addClassificationForm, "addCommodityclassification", {
       Reqs: Reqs.ReqCommodityClassification,
       Sets: Sets.SetCommodityClassification,
-      commodityClassificationList,
-      commodityClassificationListOptions,
-    },
-    addClassificationFormRef
-  );
-  showAddClassificationDialog.value = false;
+      list: commodityClassificationList,
+      list2: commodityClassificationListOptions,
+      queryInfo: { currentUsername },
+    });
+    setTimeout(() => {
+      commodityClassificationCascadeSelectorRef.value.inputValue = "";
+    }, 300);
+    showAddClassificationDialog.value = false;
+  });
 };
 
 // 生命周期
 onMounted(() => {
   Reqs.ReqCommodityClassification(
-    commodityClassificationList,
-    commodityClassificationListOptions
+    {
+      list: commodityClassificationList,
+      list2: commodityClassificationListOptions,
+    },
+    { currentUsername }
   );
 });
 </script>

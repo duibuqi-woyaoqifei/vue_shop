@@ -11,6 +11,8 @@ import HomePermissionList from '../components/HomePermissionList'
 import HomeUserList from '../components/HomeUserList'
 import HomeProductList from "../components/HomeProductList"
 import HomeCommodityClassification from "../components/HomeCommodityClassification"
+import HomeCommodityParameterSetting from "../components/HomeCommodityParameterSetting"
+import Test from "../components/Test"
 
 // 路由守卫使用
 import axios from 'axios'
@@ -37,8 +39,11 @@ const routes = [
       path: 'product-list', name: "商品列表", component: HomeProductList
     }, {
       path: 'commodity-classification', name: "商品分类", component: HomeCommodityClassification
+    }, {
+      path: 'commodity-parameter-setting', name: "商品参数设置", component: HomeCommodityParameterSetting
     },]
-  }
+  },
+  { path: '/test', name: "测试", component: Test }
 ]
 
 // 3. 创建路由实例并传递 `routes` 配置

@@ -472,7 +472,7 @@ const EachPageSizeChange = (newSize) => {
 // 生命周期
 onMounted(() => {
   reqUserList();
-  ReqRoleList(roleList);
+  ReqRoleList(roleList, currentUsername);
 });
 </script>
 

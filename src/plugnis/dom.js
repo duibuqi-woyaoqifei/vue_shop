@@ -15,7 +15,8 @@ const DialogSubmit = Throttle((info, operation, req, formRef) => {
         const requestContent = {
             pendingUpdateData: {
                 operation,
-                ...info
+                ...info,
+                currentUsername: req.queryInfo.currentUsername
             },
             req
         };
@@ -32,7 +33,8 @@ const DialogSubmit = Throttle((info, operation, req, formRef) => {
         const requestContent = {
             pendingUpdateData: {
                 operation,
-                ...info
+                ...info,
+                currentUsername: req.queryInfo.currentUsername
             },
             req
         };

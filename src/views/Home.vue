@@ -61,7 +61,9 @@
                 <el-menu-item index="/home/commodity-classification"
                   >商品分类</el-menu-item
                 >
-                <el-menu-item index="3-3">商品参数设置</el-menu-item>
+                <el-menu-item index="/home/commodity-parameter-setting"
+                  >商品参数设置</el-menu-item
+                >
               </el-menu-item-group>
             </el-sub-menu>
             <!-- 导航四 -->

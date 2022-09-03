@@ -34,5 +34,20 @@ const validatePhone = (rule, value, callback) => {
     callback();
 };
 
+// 重复校验 RepeatValidate( 响应式列表 , 属性名 String )
+const RepeatValidate = (list, prop) => {
+    return (rule, value, callback) => {
+        if (value === "") {
+            callback(new Error("不能为空"));
+        }
+        for (let i of list.value) {
+            if (value === i[prop]) {
+                callback(new Error("名称重复"));
+            }
+        }
+        callback();
+    }
+}
 
-export { validatePassword, validateEmail, validatePhone }
+
+export { validatePassword, validateEmail, validatePhone, RepeatValidate }

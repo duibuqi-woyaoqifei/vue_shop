@@ -340,7 +340,7 @@ const SetRoleList = (pendingUpdateData) => {
           showClose: true,
         });
       }
-      ReqRoleList(roleList);
+      ReqRoleList(roleList, currentUsername);
     })
     .catch((err) => {
       ElMessage({
@@ -558,6 +558,7 @@ const RemovePermission = (tagInfo, allInfo) => {
   const pendingUpdateData = {
     operation: "removePermission",
     ...assignedPermissionsObj,
+    currentUsername,
   };
 
   SetRoleList(pendingUpdateData);
@@ -565,8 +566,8 @@ const RemovePermission = (tagInfo, allInfo) => {
 
 // 生命周期
 onMounted(() => {
-  Reqs.ReqPermissionList(permissionList);
-  ReqRoleList(roleList);
+  Reqs.ReqPermissionList(permissionList, currentUsername);
+  ReqRoleList(roleList, currentUsername);
 });
 </script>
 

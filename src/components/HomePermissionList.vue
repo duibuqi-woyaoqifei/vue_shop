@@ -25,12 +25,13 @@ import { ref, reactive, onMounted } from "vue";
 import axios from "../plugnis/axios";
 
 // 数据
+const currentUsername = window.localStorage.getItem("currentUsername"); //当前账号名
 const permissionList = ref([]);
 
 // 请求方法
 const reqPermissionList = () => {
   axios
-    .get(axios.baseURL + "/permissionList")
+    .get(axios.baseURL + "/permissionList", JSON.stringify(currentUsername))
     .then((data) => {
       permissionList.value = data;
     })

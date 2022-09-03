@@ -1,0 +1,23 @@
+.introductionCommodityClassificationCascadeSelector {
+    color: rgba(255, 255, 255, .9);
+}
+
+.commodityClassificationCascadeSelector .el-input__inner {
+    color: rgba(255, 255, 255, .9);
+}
+
+.commodityClassificationCascadeSelector {
+    position: relative;
+    top: 20px;
+}
+
+.commodityParameterSettingTabs {
+    position: relative;
+    top: 40px;
+}
+
+.commodityParameterSettingTables {
+    position: relative;
+    top: 20px;
+    height: 780px;
+}

@@ -1,10 +1,11 @@
 import axios from "../plugnis/axios"
 import { InitialConvertCase } from "../plugnis/function";
+import { isRef, ref } from "vue";
 
 // 访问角色列表
-const ReqRoleList = (roleList) => {
+const ReqRoleList = (roleList, queryInfo) => {
     axios
-        .get(axios.baseURL + "/roleList")
+        .get(axios.baseURL + "/roleList", JSON.stringify(queryInfo))
         .then((data) => {
             // 角色随机分配15个权限;
             // for (let i of data) {
@@ -86,17 +87,17 @@ const ReqRoleList = (roleList) => {
 
 
 // 相同请求
-const reqList = ["PermissionList", "CommodityClassification"];
+const reqList = ["PermissionList", "CommodityClassification", "CommodityParameterSetting", "Tags"];
 let Reqs = {}
 for (let item of reqList) {
     let reqName = "Req" + item;
     let lower = InitialConvertCase(item);
-    Reqs[reqName] = (list, list2) => {
+    Reqs[reqName] = (list, queryInfo, resolve) => {
         axios
-            .get(axios.baseURL + "/" + lower)
+            .get(axios.baseURL + "/" + lower, JSON.stringify(queryInfo))
             .then((data) => {
                 if (item === "CommodityClassification") {
-                    list2.value = (JSON.parse(JSON.stringify(data)))
+                    list.list2.value = (JSON.parse(JSON.stringify(data)))
                     const DeepForEach = (obj) => {
                         for (let i in obj) {
                             if (i === "level") {
@@ -109,9 +110,24 @@ for (let item of reqList) {
                             }
                         }
                     };
-                    DeepForEach(list2.value)
+                    DeepForEach(list.list2.value)
+
+                    list.list.value = data
+                    return
                 }
-                list.value = data
+
+                if (list.list) {
+                    return list.list.value = data
+                }
+
+                if (isRef(list)) {
+                    list.value = data
+                } else {
+                    list = ref(data)
+                }
+                if (resolve) {
+                    resolve()
+                }
             })
             .catch((err) => {
                 ElMessage({
@@ -152,10 +168,17 @@ for (let item of reqList) {
                         showClose: true,
                     });
                 }
-                requestContent.req.Reqs(requestContent.req.commodityClassificationList, requestContent.req.commodityClassificationListOptions)
+
+                if (requestContent.req) {
+                    requestContent.req.Reqs({ list: requestContent.req.list, list2: requestContent.req.list2 }, requestContent.req.queryInfo)
+                    if (requestContent.req.dialogSwitch) {
+                        requestContent.req.dialogSwitch.value = false
+                    }
+                }
 
             })
             .catch((err) => {
+                console.log(err);
                 ElMessage({
                     message: "请求超时！",
                     type: "error",
