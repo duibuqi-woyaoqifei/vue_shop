@@ -10,7 +10,7 @@ const IsEdit = (oldObj, newObj) => {
 }
 
 
-// 节流 , const ? = Throttle(fn,delay) , fn 在 delay 毫秒内只能被调用一次
+// 节流 , const ? = Throttle(fn,delay) ,使用函数 ?(...arg) , fn 在 delay 毫秒内只能被调用一次
 const Throttle = (fn, delay) => {
     let timer = null;
     return function (...arg) {
@@ -87,4 +87,10 @@ const GetNow = () => {
     return currentDay + " " + currentTime
 }
 
-export { IsEdit, Throttle, InitialConvertCase, SplitWord, GetNow }
+
+module.exports = {
+    IsEdit,
+    Throttle,
+    InitialConvertCase,
+    SplitWord
+}

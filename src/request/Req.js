@@ -87,7 +87,7 @@ const ReqRoleList = (roleList, queryInfo) => {
 
 
 // 相同请求
-const reqList = ["PermissionList", "CommodityClassification", "CommodityParameterSetting", "Tags"];
+const reqList = ["PermissionList", "CommodityClassification", "CommodityParameterSetting", "Tags", "ProductList"];
 let Reqs = {}
 for (let item of reqList) {
     let reqName = "Req" + item;
@@ -115,16 +115,19 @@ for (let item of reqList) {
                     list.list.value = data
                     return
                 }
-
                 if (list.list) {
-                    return list.list.value = data
-                }
-
-                if (isRef(list)) {
+                    if (isRef(list.list)) {
+                        list.list.value = data
+                    } else {
+                        list.list = data
+                    }
+                } else if (isRef(list)) {
                     list.value = data
                 } else {
                     list = ref(data)
                 }
+
+
                 if (resolve) {
                     resolve()
                 }
@@ -143,7 +146,7 @@ let Sets = {}
 for (let item of reqList) {
     let reqName = "Set" + item;
     let lower = InitialConvertCase(item);
-    Sets[reqName] = (requestContent) => {
+    Sets[reqName] = (requestContent, resolve) => {
         axios
             .post(axios.baseURL + "/" + lower + "/set", JSON.stringify(requestContent.pendingUpdateData))
             .then((data) => {
@@ -168,11 +171,14 @@ for (let item of reqList) {
                         showClose: true,
                     });
                 }
-
                 if (requestContent.req) {
-                    requestContent.req.Reqs({ list: requestContent.req.list, list2: requestContent.req.list2 }, requestContent.req.queryInfo)
+                    requestContent.req.Reqs({ list: requestContent.req.list, list2: requestContent.req.list2 }, requestContent.req.queryInfo, resolve)
                     if (requestContent.req.dialogSwitch) {
-                        requestContent.req.dialogSwitch.value = false
+                        if (isRef(requestContent.req.dialogSwitch)) {
+                            requestContent.req.dialogSwitch.value = false
+                        } else {
+                            requestContent.req.dialogSwitch = false
+                        }
                     }
                 }
 

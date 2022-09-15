@@ -1,16 +1,21 @@
 import { Throttle } from "./function";
+import { isRef, ref } from "vue";
 
 // 对话框
 // 对话框取消操作 DialogCancel(对话框开关,表单ref对象)
 const DialogCancel = (dialogSwitch, formRef) => {
-    dialogSwitch.value = false;
+    if (isRef(dialogSwitch)) {
+        dialogSwitch.value = false;
+    } else {
+        ref(dialogSwitch).value = false
+    }
     if (formRef === undefined) return;
     setTimeout(() => {
         formRef.value.resetFields();
     }, 300);
 };
 // 对话框确认操作 DialogSubmit(表单信息,操作名称,表单ref对象)
-const DialogSubmit = Throttle((info, operation, req, formRef) => {
+const DialogSubmit = Throttle((info, operation, req, formRef, resolve) => {
     if (formRef === undefined) {
         const requestContent = {
             pendingUpdateData: {
@@ -20,7 +25,7 @@ const DialogSubmit = Throttle((info, operation, req, formRef) => {
             },
             req
         };
-        return req.Sets(requestContent);
+        return req.Sets(requestContent, resolve);
     }
     formRef.value.validate(async (isValid) => {
         if (!isValid) {
@@ -38,7 +43,7 @@ const DialogSubmit = Throttle((info, operation, req, formRef) => {
             },
             req
         };
-        await req.Sets(requestContent);
+        await req.Sets(requestContent, resolve);
     });
 }, 300)
 

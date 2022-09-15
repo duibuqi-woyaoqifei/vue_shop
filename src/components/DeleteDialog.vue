@@ -21,7 +21,7 @@
 </template>
 
 <script setup>
-import { ref, reactive } from "vue";
+import { ref, reactive, toRefs } from "vue";
 import { DialogCancel, DialogSubmit } from "../plugnis/dom";
 import { InitialConvertCase } from "../plugnis/function";
 
@@ -33,6 +33,7 @@ const props = defineProps({
 });
 
 const showDeleteDialog = ref(false);
+const {list} = toRefs(props.request)
 
 const DeleteCancel = () => {
   DialogCancel(showDeleteDialog);
@@ -44,7 +45,11 @@ const DeleteSubmit = () => {
 
   const request = {
     ...props.request,
+    list,
     dialogSwitch: showDeleteDialog,
+    queryInfo: {
+      ...props.request,
+    },
   };
   DialogSubmit(props.form, operation, request);
 };

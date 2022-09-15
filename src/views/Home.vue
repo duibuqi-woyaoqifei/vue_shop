@@ -74,7 +74,7 @@
               </template>
               <el-menu-item-group>
                 <template #title><span>订单</span></template>
-                <el-menu-item index="4-1">订单管理</el-menu-item>
+                <el-menu-item index="/home/order-manage">订单管理</el-menu-item>
                 <el-menu-item index="4-2">售后管理</el-menu-item>
               </el-menu-item-group>
               <el-menu-item-group title="评价">
@@ -100,7 +100,9 @@
               </template>
               <el-menu-item-group>
                 <template #title><span>设置</span></template>
-                <el-menu-item index="6-1">基本设置</el-menu-item>
+                <el-menu-item index="/home/basic-setting"
+                  >基本设置</el-menu-item
+                >
                 <el-menu-item index="6-2">高级设置</el-menu-item>
               </el-menu-item-group>
             </el-sub-menu>
@@ -132,7 +134,7 @@
         </el-breadcrumb>
         <!-- 头像 -->
         <el-col class="head_portrait">
-          <el-avatar size="large" src="/img/head/girl.jpg" />
+          <el-avatar size="large" :src="imgUrl" />
         </el-col>
         <!-- 左边内容 -->
         <div class="left_content">
@@ -462,9 +464,12 @@ import { useRouter } from "vue-router";
 import { ArrowRight, Delete } from "@element-plus/icons-vue";
 import axios from "../plugnis/axios";
 import zhcn from "element-plus/lib/locale/lang/zh-cn";
+
 export default {
   setup() {
     // 一些数据
+    const imgUrl = ref("");
+    const currentUsername = window.localStorage.getItem("currentUsername");
     const local = zhcn; //element组件设置中文
     const clientFormRef = ref(null); //客户表ref
     const newClientRef = ref(null); //新客户表ref
@@ -1510,8 +1515,20 @@ export default {
       QQ2: [{ validator: validateQQ, trigger: "blur" }],
     });
 
+    const ReqHead = () => {
+      axios
+        .get(axios.baseURL + "/upload")
+        .then((data) => {
+          if (data) {
+            imgUrl.value = "/img/head/" + data;
+          }
+        })
+        .catch((err) => {});
+    };
+
     // 生命周期
     onMounted(() => {
+      ReqHead();
       // 获取当前时间
       setInterval(
         (function getNow() {
@@ -1654,6 +1671,8 @@ export default {
       newClientRules,
       ...methods,
       ArrowRight,
+      imgUrl,
+      ReqHead,
     };
   },
 };

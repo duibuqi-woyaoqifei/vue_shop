@@ -12,7 +12,9 @@ import HomeUserList from '../components/HomeUserList'
 import HomeProductList from "../components/HomeProductList"
 import HomeCommodityClassification from "../components/HomeCommodityClassification"
 import HomeCommodityParameterSetting from "../components/HomeCommodityParameterSetting"
-import Test from "../components/Test"
+import HomeOrderManage from "../components/HomeOrderManage"
+import HomeBasicSetting from "../components/HomeBasicSetting"
+
 
 // 路由守卫使用
 import axios from 'axios'
@@ -41,9 +43,12 @@ const routes = [
       path: 'commodity-classification', name: "商品分类", component: HomeCommodityClassification
     }, {
       path: 'commodity-parameter-setting', name: "商品参数设置", component: HomeCommodityParameterSetting
+    }, {
+      path: 'order-manage', name: "订单管理", component: HomeOrderManage
+    }, {
+      path: 'basic-setting', name: "基本设置", component: HomeBasicSetting
     },]
-  },
-  { path: '/test', name: "测试", component: Test }
+  }
 ]
 
 // 3. 创建路由实例并传递 `routes` 配置

@@ -1,0 +1,115 @@
+删除数据库
+drop database dbname
+
+根据已有的表创建新表
+create table 新表名 like 旧表名(使用旧表创建新表)
+create table 新表名 as select 列名1,列名2… from 旧表名 definition only
+
+删除表
+drop table tabname
+
+增加一个列名
+alter table 表名 add 列名 类型
+指定列名后面添加列名
+alter table 表名 add 已有列名 after 列名 类型
+first:第一个,before:前一个,end:最后
+
+删除一个列名
+alter table 表名 drop 列名
+
+关键字:
+1.or:或
+2.and:和
+3.having:分组后的附加条件
+4.group by:分组
+5.order by:排序:asc:正序,desc:倒序
+6.in:存在于某个值中
+7.not in:不存在与某个值中
+8.inner join … on链接多表
+9.left join … on:左外连接
+10.right join … on:右外连接
+11.left(right,inner) out join … on:去重
+12.count:计数
+13.AVG:平均值
+14.sum:求和
+15.max:最大值
+16.min:最小值
+17.like '关键字%':取含有关键字的值
+18.distinct:去重
+19.round:四舍五入
+20.where 1=1:全选
+21.where 1=2:全不选
+22.limit 1,5:从第二行开始显示5条数据
+23.top 10:select top 10 * from 表名:显示前十条数据
+24.newid():随机
+
+1.选择查询:
+select * from 表名 where 范围
+
+2.完全查询:
+select * from 表名
+
+3.模糊查询:
+select * from 表名 where 列名 like '%value%'(查询包含value的值)
+
+4.排序查询(倒序,默认为正序):
+select * from 表名 order by 列名 desc
+
+5.计数查询:
+select count as 别名 from 表名
+
+6.求和查询:
+select sum(field) as 别名 from 表名
+
+7.平均值查询:
+select avg(filed) as 别名 from 表名
+
+8.最大值查询:
+select max(filed) as 别名 from 表名
+
+9.最小值查询:
+select min(filed) as 别名 from 表名
+
+10.四舍五入查询:
+select round(min(filed),要保留的小数位数) as 别名 from 表名
+
+11.去重查询:
+select distinct 列名 from 表名
+
+12.分组查询:
+select * from 表名 group by 列名
+
+13.多条件查询:
+select * from 表名 where 列名='范围' and 列名='范围'
+
+14.不确定条件查询:
+select * from 表名 where 列名='范围' or 列名='范围'
+
+15.多条件分组求值查询:
+select 列名,min(filed)from 表名 where 列名='范围' group by 列名 having sum(列名)
+
+16.子查询(子查询的结果作为主查询的条件):
+select * from 表名 where=(select id from 表名 where 列名='范围')
+
+17.连表查询(内连接):
+select * from 表名 inner join 表名 on 主键=外键(必须有主外键)
+
+18.连表查询(内连接)(去重):
+select * from 表名 inner out join 表名 on 主键=外键(必须有主外键)
+
+注:内连接只显示相关联的数据
+19.连表查询(左外连接)(显示左表的全部信息和右表相关联的信息):
+select * from 表名 left join 表名 on 主键=外键(必须有主外键)
+
+20.连表查询(右外连接)(显示右表的全部信息和左表相关联的信息):
+select * from 表名 right join 表名 on 主键=外键(必须有主外键)
+
+21.连表查询(全外连接)(显示两个表中的所有记录):
+select * from 表名 full/cross join 表名 on 主键=外键(必须有主外键)
+
+22.说明:几个高级查询运算词
+A:union(结合两个结果表并消除其中的重复行而派生出另一个表)
+例:select name from 表名1 union select name from 表名2(去除name的重复行)
+B:except(通过包括所有在 TABLE1 中但不在 TABLE2 中的行并消除所有重复行而派生出一个结果表)
+C:intersect(通过只包括 TABLE1 和 TABLE2 中都有的行并消除所有重复行而派生出一个结果表)
+注:当这三个运算符与all一起使用时不消除重复行
