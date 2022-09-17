@@ -26,10 +26,10 @@ app.use(bodyParser.json())
 // 创建数据库链接
 const conn = mysql.createConnection({
     host: '127.0.0.1',
-    user: 'root',
+    user: 'zhiyinnitaimei',
     port: '3306',
-    password: 'root',
-    database: 'test',
+    password: 'niganmaaiyo',
+    database: 'zhiyinnitaimei',
 })
 conn.connect(err => {
     if (err) {
@@ -64,7 +64,7 @@ app.get('/accountlist', function (req, res) {
     res.status(200)
     console.log("有人登录啦");
     // 每次访问更新数据
-    conn.query('SELECT * FROM test.accountlist', function (error, mysqlRes, fields) {
+    conn.query('SELECT * FROM zhiyinnitaimei.accountlist', function (error, mysqlRes, fields) {
         if (error) {
             throw error
         }
@@ -87,11 +87,11 @@ app.post('/accountlist/set', function (req, res) {
         data = JSON.parse(JSON.stringify(JSON.parse(i)))
     }
     // 保存用户名密码
-    const sql = "INSERT INTO `test`.`accountlist` (`username`, `password`) VALUES ('" + data.username + "','" + data.password + "')"
+    const sql = "INSERT INTO `zhiyinnitaimei`.`accountlist` (`username`, `password`) VALUES ('" + data.username + "','" + data.password + "')"
     conn.query(sql, function (error, res, fields) {
         if (error) throw error
         // 每次访问更新数据
-        conn.query('SELECT * FROM test.accountlist', function (error, res, fields) {
+        conn.query('SELECT * FROM zhiyinnitaimei.accountlist', function (error, res, fields) {
             if (error) {
                 throw error
             }
@@ -1101,7 +1101,6 @@ app.post('/upload/set', function (req, res) {
         })
     }
 })
-
 
 // 配置服务端口
 const server = app.listen(3000, function () {

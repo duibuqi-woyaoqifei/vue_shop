@@ -2,7 +2,7 @@ import axios from "axios"
 class HttpRequest {
     //初始化构造函数，this指向的是构造函数自身
     constructor() {
-        this.baseURL = "http://127.0.0.1:3000";
+        this.baseURL = "http://47.96.21.73:3000";
         this.timout = 3000;
     }
     setInterceptors(instance) { //创建拦截器
