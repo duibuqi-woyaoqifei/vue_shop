@@ -72,6 +72,17 @@
     box-sizing: border-box;
 }
 
+.password .el-input__password svg {
+    position: absolute;
+    font-size: 16px;
+    color: rgba(0, 0, 0, 0.5);
+}
+
+.password .el-input__suffix {
+    position: absolute;
+    right: 14px;
+}
+
 .RememberMe {
     position: absolute;
     bottom: -50px;
@@ -92,24 +103,29 @@ input[type=checkbox] {
     bottom: -50px;
     width: 80px;
 }
+
 .el-button.is-text:hover {
     background-color: #000;
 }
+
 .el-button--primary {
-    --el-button-bg-color:rgba(134, 168, 231, 1);
-    --el-button-border-color:rgba(0,0,0,0.1);
+    --el-button-bg-color: rgba(134, 168, 231, 1);
+    --el-button-border-color: rgba(0, 0, 0, 0.1);
     border-radius: 5px;
-    --el-button-text-color:rgba(101, 100, 113, 1);
-    --el-button-hover-text-color:rgba(101, 100, 113, 0.5);
-    --el-button-hover-bg-color:rgba(255, 255, 255, 0.1);
+    --el-button-text-color: rgba(101, 100, 113, 1);
+    --el-button-hover-text-color: rgba(101, 100, 113, 0.5);
+    --el-button-hover-bg-color: rgba(255, 255, 255, 0.1);
 }
+
 .register:hover {
     background-color: rgba(134, 168, 231, 0.5);
 
 }
+
 .register {
     border: none;
 }
+
 .password_again {
     position: absolute;
     top: 220px;
@@ -117,6 +133,18 @@ input[type=checkbox] {
     padding: 0 30px;
     box-sizing: border-box;
 }
+
+.password_again .el-input__password svg {
+    position: absolute;
+    font-size: 16px;
+    color: rgba(0, 0, 0, 0.5);
+}
+
+.password_again .el-input__suffix {
+    position: absolute;
+    right: 14px;
+}
+
 .register_box .el-input__inner {
     background-color: rgba(134, 168, 231, 1);
     text-align: center;

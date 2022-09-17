@@ -87,7 +87,7 @@ const ReqRoleList = (roleList, queryInfo) => {
 
 
 // 相同请求
-const reqList = ["PermissionList", "CommodityClassification", "CommodityParameterSetting", "Tags", "ProductList"];
+const reqList = ["PermissionList", "CommodityClassification", "CommodityParameterSetting", "Tags", "ProductList", "OrderList"];
 let Reqs = {}
 for (let item of reqList) {
     let reqName = "Req" + item;

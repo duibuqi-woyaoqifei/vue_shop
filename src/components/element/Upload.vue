@@ -64,7 +64,7 @@ const ChangeImg = (file) => {
   formData.append("file", file.raw);
 
   var xhr = new XMLHttpRequest();
-  xhr.open("POST", "http://192.168.1.80:3001/upload", true);
+  xhr.open("POST", "http://127.0.0.1:3001/upload", true);
 
   xhr.onload = function (data) {
     // 请求结束后，在此处写处理代码

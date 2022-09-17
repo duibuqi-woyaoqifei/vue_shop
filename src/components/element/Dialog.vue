@@ -1,5 +1,5 @@
 <template>
-  <el-dialog :title="title" v-model="showDialog" @close="DialogCancel">
+  <el-dialog :title="title" v-model="showDialog" @close="Cancel">
     <el-form ref="formRef" :model="formData" :rules="formRules">
       <el-form-item
         :label="item"
@@ -40,6 +40,13 @@
           :props="commodityClassificationCascadeSelectorProps"
         >
         </el-cascader>
+        <el-cascader
+          v-else-if="item === '省市区/县'"
+          v-model="formData[item]"
+          :options="regionData"
+          clearable
+        >
+        </el-cascader>
         <el-input v-else v-model="formData[item]" />
       </el-form-item>
     </el-form>
@@ -59,6 +66,7 @@ import { ref, reactive, nextTick, toRef, toRefs, toRaw, onMounted } from "vue";
 import { DialogCancel, DialogSubmit } from "../../plugnis/dom";
 import { GetNow, IsEdit } from "../../plugnis/function";
 import { Reqs } from "../../request/Req";
+import { regionData } from "element-china-area-data";
 
 const props = defineProps({
   title: String,
@@ -84,6 +92,7 @@ const formRef = ref();
 const formItem = props.formItem.split(",");
 const formData = reactive({
   createTime: "",
+  index: 0,
 });
 const formRules = reactive({
   商品名称: [{ required: true, message: "名称不能为空", trigger: "blur" }],
@@ -152,6 +161,9 @@ const Submit = () => {
         formData[i] = "";
       }
     }
+  }
+  if (request.index) {
+    formData.index = request.index;
   }
 
   new Promise((resolve, reject) => {

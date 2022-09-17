@@ -58,7 +58,9 @@
     padding-right: 40px;
 }
 
-.income,.newUser,.view {
+.income,
+.newInventory,
+.view {
     float: left;
     width: 30%;
     height: 200px;
@@ -68,11 +70,12 @@
     border-radius: 25px;
     box-shadow: -10px 20px 80px rgba(0, 0, 0, 0.2);
 }
+
 .view {
     margin-right: 0;
 }
 
-.todayFoot h2{
+.todayFoot h2 {
     padding-left: 20px;
 }
 

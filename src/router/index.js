@@ -5,7 +5,6 @@ import Home from '../views/Home'
 import Register from '../views/Register'
 // Home嵌套路由
 import HomePersonalInformation from '../components/HomePersonalInformation'
-import HomePlan from '../components/HomePlan'
 import HomeRoleList from '../components/HomeRoleList'
 import HomePermissionList from '../components/HomePermissionList'
 import HomeUserList from '../components/HomeUserList'
@@ -14,7 +13,7 @@ import HomeCommodityClassification from "../components/HomeCommodityClassificati
 import HomeCommodityParameterSetting from "../components/HomeCommodityParameterSetting"
 import HomeOrderManage from "../components/HomeOrderManage"
 import HomeBasicSetting from "../components/HomeBasicSetting"
-
+import HomeDataReport from "../components/HomeDataReport";
 
 // 路由守卫使用
 import axios from 'axios'
@@ -29,8 +28,6 @@ const routes = [
   {
     path: '/home', name: "主页", component: Home, children: [{
       path: 'personal-information', name: "我的信息", component: HomePersonalInformation
-    }, {
-      path: 'plan', name: "计划", component: HomePlan
     }, {
       path: 'role-list', name: "角色列表", component: HomeRoleList
     }, {
@@ -47,6 +44,8 @@ const routes = [
       path: 'order-manage', name: "订单管理", component: HomeOrderManage
     }, {
       path: 'basic-setting', name: "基本设置", component: HomeBasicSetting
+    }, {
+      path: 'data-report', name: "数据报表", component: HomeDataReport
     },]
   }
 ]

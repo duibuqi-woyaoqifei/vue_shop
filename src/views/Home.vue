@@ -29,7 +29,6 @@
                 <el-menu-item index="/home/personal-information"
                   >我的信息</el-menu-item
                 >
-                <el-menu-item index="/home/plan">计划</el-menu-item>
               </el-menu-item-group>
             </el-sub-menu>
             <!-- 导航二 -->
@@ -75,10 +74,6 @@
               <el-menu-item-group>
                 <template #title><span>订单</span></template>
                 <el-menu-item index="/home/order-manage">订单管理</el-menu-item>
-                <el-menu-item index="4-2">售后管理</el-menu-item>
-              </el-menu-item-group>
-              <el-menu-item-group title="评价">
-                <el-menu-item index="4-3">评价管理</el-menu-item>
               </el-menu-item-group>
             </el-sub-menu>
             <!-- 导航五 -->
@@ -89,7 +84,7 @@
               </template>
               <el-menu-item-group>
                 <template #title><span>统计</span></template>
-                <el-menu-item index="5-1">数据报表</el-menu-item>
+                <el-menu-item index="/home/data-report">数据报表</el-menu-item>
               </el-menu-item-group>
             </el-sub-menu>
             <!-- 导航六 -->
@@ -103,7 +98,6 @@
                 <el-menu-item index="/home/basic-setting"
                   >基本设置</el-menu-item
                 >
-                <el-menu-item index="6-2">高级设置</el-menu-item>
               </el-menu-item-group>
             </el-sub-menu>
           </el-menu>

@@ -3,7 +3,7 @@
     class="searchBox"
     v-model="state"
     :fetch-suggestions="querySearch"
-    placeholder="查询商品名称"
+    :placeholder="placeholder"
     @select="handleSelect"
     clearable
     :trigger-on-focus="false"
@@ -27,6 +27,7 @@ const props = defineProps({
 
 const { request } = toRaw(props);
 const { list } = toRefs(request);
+const { placeholder } = props;
 
 const state = ref("");
 watch(state, (current, previous) => {
@@ -55,7 +56,7 @@ const createFilter = (queryString) => {
   };
 };
 const loadAll = () => {
-  return [{ value: "vue" }];
+  return [];
 };
 const handleSelect = (item) => {
   console.log(item);

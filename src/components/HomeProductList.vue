@@ -5,6 +5,7 @@
       ><SearchBox
         ref="searchBoxRef"
         :request="searchRequest"
+        placeholder="查询商品名称"
         @change="TransVal"
       ></SearchBox
     ></el-col>
@@ -44,8 +45,11 @@ const productList = ref([]);
 const tableRequest = reactive({
   Reqs: Reqs.ReqProductList,
   Sets: Sets.SetProductList,
-  productList,
+  list: productList,
   content: "",
+  formItem: "商品名称,价格,重量,分类,参数,属性",
+  name: "商品表格",
+  pageSize: 7,
 });
 // 对话框
 const addDialogRef = ref();
