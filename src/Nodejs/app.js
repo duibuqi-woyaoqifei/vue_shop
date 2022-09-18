@@ -1114,13 +1114,21 @@ const server = app.listen(3000, function () {
 const httpServer = http.createServer((req, res) => {
     if (req.url === "/upload") {
         const form = new multiparty.Form({
-            uploadDir: 'public/img/head'
+            uploadDir: ''
         })
-        form.parse(req)
-        form.on("file", (name, value) => {
-            console.log(name, value);
+
+        form.parse(req, (err, fields, files) => {
+            const currentUsername = fields.currentUsername[0]
+            fs.mkdir("./temp/" + currentUsername, res => {
+                console.log(1);
+                form.uploadDir = "./temp/" + currentUsername
+                form.parse(req, (err, fields, files) => {
+                    console.log(fields, files);
+                })
+            })
+
         })
-        res.write("123")
+
     }
 
 })

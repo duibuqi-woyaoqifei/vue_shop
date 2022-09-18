@@ -21,6 +21,7 @@
 import { onMounted, reactive, ref } from "vue";
 import axios from "../../plugnis/axios";
 
+const currentUsername = window.localStorage.getItem("currentUsername");
 const uploadRef = ref();
 const dialogVisible = ref(false);
 const dialogImageUrl = ref("");
@@ -62,6 +63,7 @@ const ChangeImg = (file) => {
 
   const formData = new FormData();
   formData.append("file", file.raw);
+  formData.append("currentUsername", currentUsername);
 
   var xhr = new XMLHttpRequest();
   xhr.open("POST", "http://127.0.0.1:3001/upload", true);
@@ -71,7 +73,7 @@ const ChangeImg = (file) => {
     console.log(1);
   };
   xhr.send(formData);
-  window.location.reload();
+  // window.location.reload();
 };
 const HandlePreview = (file) => {
   dialogVisible.value = true;
