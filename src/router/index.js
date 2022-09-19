@@ -16,7 +16,7 @@ import HomeBasicSetting from "../components/HomeBasicSetting"
 import HomeDataReport from "../components/HomeDataReport";
 
 // 路由守卫使用
-import axios from 'axios'
+import axios from '../plugnis/axios'
 import { ElMessage } from 'element-plus'
 
 // 2. 定义一些路由
@@ -62,11 +62,11 @@ router.beforeEach((to, from, next) => {
   // 校验token
   axios
     .post(
-      "http://127.0.0.1:3000/token",
+      axios.baseURL + "/token",
       JSON.stringify(window.localStorage.getItem("token"))
     )
     .then((data) => {
-      if (data.data.verify === true) {
+      if (data.verify === true) {
         return next()
       } else {
         ElMessage({

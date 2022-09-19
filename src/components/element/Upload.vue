@@ -3,12 +3,13 @@
     v-model:file-list="fileList"
     ref="uploadRef"
     class="avatar-uploader"
-    :http-request="uploadRequest"
+    :http-request="UploadRequest"
     :on-remove="HandleRemove"
     :on-preview="HandlePreview"
     :on-change="ChangeImg"
     list-type="picture-card"
     :limit="1"
+    :on-exceed="UploadErr"
   >
     <el-icon class="avatar-uploader-icon"><Plus /></el-icon>
   </el-upload>
@@ -27,12 +28,17 @@ const dialogVisible = ref(false);
 const dialogImageUrl = ref("");
 const fileList = ref([]);
 
-const ReqHead = () => {
+const ReqHead2 = () => {
   axios
-    .get(axios.baseURL + "/upload")
+    .get(axios.baseURL + "/upload", JSON.stringify({ currentUsername }))
     .then((data) => {
+      if (data === "no head") {
+        return;
+      }
       if (data) {
-        fileList.value.push({ url: "/img/head/" + data });
+        fileList.value.push({
+          url: "img/head/" + currentUsername + "/" + data,
+        });
       }
     })
     .catch((err) => {});
@@ -70,11 +76,12 @@ const ChangeImg = (file) => {
 
   xhr.onload = function (data) {
     // 请求结束后，在此处写处理代码
-    console.log(1);
+    console.log(data);
+    window["watchUpdateHead"] = !window["watchUpdateHead"];
   };
   xhr.send(formData);
-  // window.location.reload();
 };
+
 const HandlePreview = (file) => {
   dialogVisible.value = true;
   dialogImageUrl.value = file.url;
@@ -83,7 +90,7 @@ const HandleRemove = () => {
   axios
     .post(
       axios.baseURL + "/upload/set",
-      JSON.stringify({ operation: "delete" })
+      JSON.stringify({ operation: "delete", currentUsername })
     )
     .then((data) => {
       if (data === "Deleted successfully") {
@@ -92,8 +99,8 @@ const HandleRemove = () => {
           type: "success",
           showClose: true,
         });
+        window["watchUpdateHead"] = !window["watchUpdateHead"];
         uploadRef.value.clearFiles();
-        window.location.reload();
       }
     })
     .catch((err) => {
@@ -104,10 +111,17 @@ const HandleRemove = () => {
       });
     });
 };
-const uploadRequest = () => {};
+const UploadRequest = () => {};
+const UploadErr = () => {
+  ElMessage({
+    message: "如要更换请先删除原头像！",
+    type: "error",
+    showClose: true,
+  });
+};
 
 onMounted(() => {
-  ReqHead();
+  ReqHead2();
 });
 </script>
 
