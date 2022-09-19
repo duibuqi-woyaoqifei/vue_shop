@@ -37,8 +37,10 @@ echarts.use([
 ]);
 
 onMounted(() => {
+  let myReport = document.getElementById("dataReport");
+  myReport.removeAttribute("_echarts_instance_");
   // 初始化echarts实例
-  var myChart = echarts.init(document.getElementById("dataReport"), null, {
+  var myChart = echarts.init(myReport, null, {
     width: 800,
     height: 800,
   });
