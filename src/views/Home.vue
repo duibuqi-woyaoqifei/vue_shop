@@ -305,7 +305,7 @@
               <li v-show="showEdit" class="function-list">
                 <span class="fn">
                   <el-icon
-                    ><EditPen class="ico" @click="Edit" :index="index"
+                    ><EditPen class="ico" @click="Edit(item)" :index="index"
                   /></el-icon>
                 </span>
               </li>
@@ -440,16 +440,74 @@
             <el-button icon="Close" circle size="large" />
           </div>
           <!-- 确认修改和取消修改 -->
-          <div class="confirmFn" v-show="showEdit" @click="confirmEdit">
-            <el-button icon="Check" circle size="large" />
-          </div>
-          <div class="cancelFn" v-show="showEdit" @click="cancelEdit">
+          <div class="cancelFn" v-show="showEdit" @click="backBegining">
             <el-button icon="Close" circle size="large" />
           </div>
         </div>
       </div>
     </div>
   </div>
+  <!-- 修改客户信息对话框 -->
+  <el-dialog
+    v-model="showEditDialog"
+    title="修改"
+    width="30%"
+    @close="cancelEdit"
+  >
+    <el-form
+      ref="editFormRef"
+      :model="editForm"
+      :rules="newClientRules"
+      label-width="120px"
+    >
+      <el-form-item label="姓名" prop="name">
+        <el-input v-model="editForm.name" />
+      </el-form-item>
+      <el-form-item label="电话" prop="phone">
+        <el-input v-model="editForm.phone" />
+      </el-form-item>
+      <el-form-item label="微信" prop="weixin">
+        <el-input v-model="editForm.weixin" />
+      </el-form-item>
+      <el-form-item label="QQ" prop="qq">
+        <el-input v-model="editForm.qq" />
+      </el-form-item>
+      <el-form-item label="性别">
+        <el-radio-group v-model="editForm.gender">
+          <el-radio label="男" size="large">男</el-radio>
+          <el-radio label="女" size="large">女</el-radio>
+        </el-radio-group>
+      </el-form-item>
+      <el-form-item label="联系时间">
+        <el-col :span="11">
+          <el-date-picker
+            v-model="editForm.date"
+            type="date"
+            placeholder="选择日期"
+            style="width: 100%"
+          />
+        </el-col>
+        <el-col :span="2">
+          <span>-</span>
+        </el-col>
+        <el-col :span="11">
+          <el-time-picker
+            v-model="editForm.time"
+            placeholder="选择时间"
+            style="width: 100%"
+          />
+        </el-col>
+      </el-form-item>
+    </el-form>
+    <template #footer>
+      <span>
+        <el-button @click="cancelEdit">取消</el-button>
+        <el-button type="primary" @click="confirmEdit" style="margin-left: 20px"
+          >确认</el-button
+        >
+      </span>
+    </template>
+  </el-dialog>
 </template>
 
 <script>
@@ -458,10 +516,35 @@ import { useRouter } from "vue-router";
 import { ArrowRight, Delete } from "@element-plus/icons-vue";
 import axios from "../plugnis/axios";
 import zhcn from "element-plus/lib/locale/lang/zh-cn";
+import { DialogCancel } from "../plugnis/dom";
+import { IsEdit } from "../plugnis/function";
 
 export default {
   setup() {
     // 一些数据
+    const editFormRef = ref();
+    const editForm = reactive({
+      name: "",
+      phone: "",
+      weixin: "",
+      qq: "",
+      gender: "",
+      date: "",
+      time: "",
+      nameOld: "",
+    });
+    const editFormClone = reactive({
+      name: "",
+      phone: "",
+      weixin: "",
+      qq: "",
+      gender: "",
+      date: "",
+      time: "",
+      nameOld: "",
+    });
+
+    const showEditDialog = ref(false);
     const imgUrl = ref("");
     const currentUsername = window.localStorage.getItem("currentUsername");
     const local = zhcn; //element组件设置中文
@@ -948,103 +1031,13 @@ export default {
           }
         }
       },
-      confirmEdit() {
-        if (!newClient.isEdit) {
-          return this.cancelEdit();
-        }
-        newClientRef.value[0].validate(async (isValid) => {
-          // 校验结果判断
-          if (!isValid)
-            return ElMessage({
-              message: "客户信息格式错误！",
-              type: "error",
-              showClose: true,
-            });
-
-          // 遍历出修改的数据
-          for (let i in newClient) {
-            if (i.indexOf("2") === -1) continue;
-            if (newClient[i] !== newClient[i.slice(0, -1)]) {
-              pendingEdit[i.slice(0, -1)] = newClient[i];
-            }
-          }
-
-          // 请求客户信息修改接口
-          await axios
-            .post(
-              axios.baseURL + "/client/set",
-              JSON.stringify({
-                currentUsername: window.localStorage.getItem("currentUsername"),
-                nameOld: newClient.姓名,
-                name: pendingEdit.姓名,
-                phone: pendingEdit.手机号码,
-                weixin: pendingEdit.微信,
-                qq: pendingEdit.QQ,
-                date: pendingEdit.日期,
-                time: pendingEdit.时间,
-                gender: pendingEdit.性别,
-                CRUD: "update",
-              })
-            )
-            .then((data) => {
-              for (let i in pendingEdit) {
-                if (pendingEdit[i]) {
-                  if (i === "姓名") {
-                    mysqlClientArr2.value[newClient.index].name =
-                      pendingEdit[i];
-                  }
-                  if (i === "手机号码") {
-                    mysqlClientArr2.value[newClient.index].phone =
-                      pendingEdit[i];
-                  }
-                  if (i === "微信") {
-                    mysqlClientArr2.value[newClient.index].weixin =
-                      pendingEdit[i];
-                  }
-                  if (i === "QQ") {
-                    mysqlClientArr2.value[newClient.index].qq = pendingEdit[i];
-                  }
-                  if (i === "日期") {
-                    mysqlClientArr2.value[newClient.index].date = JSON.parse(
-                      JSON.stringify(pendingEdit[i])
-                    );
-                  }
-                  if (i === "时间") {
-                    mysqlClientArr2.value[newClient.index].time = JSON.parse(
-                      JSON.stringify(pendingEdit[i])
-                    );
-                  }
-                  if (i === "性别") {
-                    mysqlClientArr2.value[newClient.index].gender =
-                      pendingEdit[i];
-                  }
-                  pendingEdit[i] = "";
-                }
-              }
-              ElMessage({
-                message: "修改成功！",
-                type: "success",
-                showClose: true,
-              });
-              restaurants2.value = clientAll();
-              this.cancelEdit();
-            })
-            .catch((err) => {
-              ElMessage({
-                message: "请求错误！",
-                type: "error",
-                showClose: true,
-              });
-            });
-        });
-      },
-      cancelEdit() {
-        newClient.isEdit = false;
-        showFunction.value = true;
+      backBegining() {
         const functionBtn = document.getElementsByClassName("function");
-        functionBtn[0].style.animation = "appear 0.3s forwards";
-        showEdit.value = false;
-        settingName.value = "";
+        functionBtn[0].style.animation = "appear 0.15s forwards";
+        showFunction.value = true;
+        setTimeout(() => {
+          showEdit.value = false;
+        }, 300);
         const listC = document.getElementsByClassName("infinite-list-item");
         for (let i of listC) {
           i.style.animation = "Efold 0.5s forwards";
@@ -1053,205 +1046,28 @@ export default {
           document.getElementsByClassName("showClientDetail");
         for (let i of showClientDetailBtn) {
           i.style.animation = "appear 0.5s forwards";
-          i.firstChild.setAttribute("isfold", "true");
-        }
-        const editBtn = document.getElementsByClassName("ico");
-        for (let i of editBtn) {
-          i.style.opacity = "1";
         }
       },
-      Edit(e) {
-        if (newClient.isEdit) {
-          newClientRef.value[0].validate(async (isValid) => {
-            // 校验结果判断
-            if (!isValid)
-              return ElMessage({
-                message: "客户信息格式错误！",
-                type: "error",
-                showClose: true,
-              });
+      confirmEdit() {
+        if (!IsEdit(editForm, editFormClone)) {
+          return DialogCancel(showEditDialog, editFormRef);
+        }
+        const pendingData = {
+          ...editForm,
+          currentUsername,
+          CRUD: "update",
+        };
 
-            // 遍历出修改的数据
-            for (let i in newClient) {
-              if (i.indexOf("2") === -1) continue;
-              if (newClient[i] !== newClient[i.slice(0, -1)]) {
-                pendingEdit[i.slice(0, -1)] = newClient[i];
-              }
-            }
-
-            // 请求客户信息修改接口
-            await axios
+        axios
+          .post(axios.baseURL + "/client/set", JSON.stringify(pendingData))
+          .then((data) => {
+            axios
               .post(
-                axios.baseURL + "/client/set",
-                JSON.stringify({
-                  currentUsername:
-                    window.localStorage.getItem("currentUsername"),
-                  nameOld: newClient.姓名,
-                  name: pendingEdit.姓名,
-                  phone: pendingEdit.手机号码,
-                  weixin: pendingEdit.微信,
-                  qq: pendingEdit.QQ,
-                  date: pendingEdit.日期,
-                  time: pendingEdit.时间,
-                  gender: pendingEdit.性别,
-                  CRUD: "update",
-                })
+                axios.baseURL + "/client",
+                JSON.stringify(window.localStorage.getItem("currentUsername"))
               )
               .then((data) => {
-                for (let i in pendingEdit) {
-                  if (pendingEdit[i]) {
-                    if (i === "姓名") {
-                      mysqlClientArr2.value[newClient.index].name =
-                        pendingEdit[i];
-                    }
-                    if (i === "手机号码") {
-                      mysqlClientArr2.value[newClient.index].phone =
-                        pendingEdit[i];
-                    }
-                    if (i === "微信") {
-                      mysqlClientArr2.value[newClient.index].weixin =
-                        pendingEdit[i];
-                    }
-                    if (i === "QQ") {
-                      mysqlClientArr2.value[newClient.index].qq =
-                        pendingEdit[i];
-                    }
-                    if (i === "日期") {
-                      mysqlClientArr2.value[newClient.index].date = JSON.parse(
-                        JSON.stringify(pendingEdit[i])
-                      );
-                    }
-                    if (i === "时间") {
-                      mysqlClientArr2.value[newClient.index].time = JSON.parse(
-                        JSON.stringify(pendingEdit[i])
-                      );
-                    }
-                    if (i === "性别") {
-                      mysqlClientArr2.value[newClient.index].gender =
-                        pendingEdit[i];
-                    }
-                    pendingEdit[i] = "";
-                  }
-                }
-                newClient.isEdit = false;
-                if (e.target.getAttribute("class") === "ico") {
-                  newClient.index = e.target.getAttribute("index");
-                  const clientBtn =
-                    e.target.parentNode.parentNode.parentNode.nextSibling
-                      .nextSibling.firstChild.nextSibling.nextSibling;
-
-                  if (clientBtn.nodeName === "#text") return;
-
-                  settingName.value = clientBtn.firstChild.innerText.slice(3);
-                  newClient.姓名 = clientBtn.firstChild.innerText.slice(3);
-                  newClient.性别 =
-                    clientBtn.firstChild.nextSibling.innerText.slice(-1);
-                  newClient.手机号码 =
-                    clientBtn.firstChild.nextSibling.nextSibling.innerText.slice(
-                      4
-                    );
-                  newClient.微信 =
-                    clientBtn.firstChild.nextSibling.nextSibling.nextSibling.innerText.slice(
-                      3
-                    );
-                  newClient.QQ =
-                    clientBtn.firstChild.nextSibling.nextSibling.nextSibling.nextSibling.innerText.slice(
-                      3
-                    );
-                  newClient.日期 =
-                    clientBtn.firstChild.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.innerText.slice(
-                      5
-                    );
-                  newClient.时间 =
-                    clientBtn.firstChild.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.innerText.slice(
-                      5
-                    );
-                  newClient.姓名2 = clientBtn.firstChild.innerText.slice(3);
-                  newClient.性别2 =
-                    clientBtn.firstChild.nextSibling.innerText.slice(-1);
-                  newClient.手机号码2 =
-                    clientBtn.firstChild.nextSibling.nextSibling.innerText.slice(
-                      4
-                    );
-                  newClient.微信2 =
-                    clientBtn.firstChild.nextSibling.nextSibling.nextSibling.innerText.slice(
-                      3
-                    );
-                  newClient.QQ2 =
-                    clientBtn.firstChild.nextSibling.nextSibling.nextSibling.nextSibling.innerText.slice(
-                      3
-                    );
-                  newClient.日期2 =
-                    clientBtn.firstChild.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.innerText.slice(
-                      5
-                    );
-                  newClient.时间2 =
-                    clientBtn.firstChild.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.innerText.slice(
-                      5
-                    );
-                } else {
-                  newClient.index = e.target.parentNode.getAttribute("index");
-                  const clientBtn =
-                    e.target.parentNode.parentNode.parentNode.parentNode
-                      .nextSibling.nextSibling.firstChild.nextSibling
-                      .nextSibling;
-
-                  if (clientBtn.nodeName === "#text") return;
-
-                  settingName.value = clientBtn.firstChild.innerText.slice(3);
-                  newClient.姓名 = clientBtn.firstChild.innerText.slice(3);
-                  newClient.性别 =
-                    clientBtn.firstChild.nextSibling.innerText.slice(-1);
-                  newClient.手机号码 =
-                    clientBtn.firstChild.nextSibling.nextSibling.innerText.slice(
-                      4
-                    );
-                  newClient.微信 =
-                    clientBtn.firstChild.nextSibling.nextSibling.nextSibling.innerText.slice(
-                      3
-                    );
-                  newClient.QQ =
-                    clientBtn.firstChild.nextSibling.nextSibling.nextSibling.nextSibling.innerText.slice(
-                      3
-                    );
-                  newClient.日期 =
-                    clientBtn.firstChild.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.innerText.slice(
-                      5
-                    );
-                  newClient.时间 =
-                    clientBtn.firstChild.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.innerText.slice(
-                      5
-                    );
-                  newClient.姓名2 = clientBtn.firstChild.innerText.slice(3);
-                  newClient.性别2 =
-                    clientBtn.firstChild.nextSibling.innerText.slice(-1);
-                  newClient.手机号码2 =
-                    clientBtn.firstChild.nextSibling.nextSibling.innerText.slice(
-                      4
-                    );
-                  newClient.微信2 =
-                    clientBtn.firstChild.nextSibling.nextSibling.nextSibling.innerText.slice(
-                      3
-                    );
-                  newClient.QQ2 =
-                    clientBtn.firstChild.nextSibling.nextSibling.nextSibling.nextSibling.innerText.slice(
-                      3
-                    );
-                  newClient.日期2 =
-                    clientBtn.firstChild.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.innerText.slice(
-                      5
-                    );
-                  newClient.时间2 =
-                    clientBtn.firstChild.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.innerText.slice(
-                      5
-                    );
-                }
-                ElMessage({
-                  message: "修改成功！",
-                  type: "success",
-                  showClose: true,
-                });
-                restaurants2.value = clientAll();
+                mysqlClientArr2.value = data;
               })
               .catch((err) => {
                 ElMessage({
@@ -1260,112 +1076,32 @@ export default {
                   showClose: true,
                 });
               });
+            DialogCancel(showEditDialog, editFormRef);
+            ElMessage({
+              type: "success",
+              message: "修改成功！",
+              showClose: true,
+            });
+          })
+          .catch((err) => {
+            ElMessage({
+              type: "error",
+              message: "请求超时！",
+              showClose: true,
+            });
           });
-        } else {
-          if (e.target.getAttribute("class") === "ico") {
-            newClient.index = e.target.getAttribute("index");
-            const clientBtn =
-              e.target.parentNode.parentNode.parentNode.nextSibling.nextSibling
-                .firstChild.nextSibling.nextSibling;
-
-            if (clientBtn.nodeName === "#text") return;
-
-            settingName.value = clientBtn.firstChild.innerText.slice(3);
-            newClient.姓名 = clientBtn.firstChild.innerText.slice(3);
-            newClient.性别 =
-              clientBtn.firstChild.nextSibling.innerText.slice(-1);
-            newClient.手机号码 =
-              clientBtn.firstChild.nextSibling.nextSibling.innerText.slice(4);
-            newClient.微信 =
-              clientBtn.firstChild.nextSibling.nextSibling.nextSibling.innerText.slice(
-                3
-              );
-            newClient.QQ =
-              clientBtn.firstChild.nextSibling.nextSibling.nextSibling.nextSibling.innerText.slice(
-                3
-              );
-            newClient.日期 =
-              clientBtn.firstChild.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.innerText.slice(
-                5
-              );
-            newClient.时间 =
-              clientBtn.firstChild.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.innerText.slice(
-                5
-              );
-            newClient.姓名2 = clientBtn.firstChild.innerText.slice(3);
-            newClient.性别2 =
-              clientBtn.firstChild.nextSibling.innerText.slice(-1);
-            newClient.手机号码2 =
-              clientBtn.firstChild.nextSibling.nextSibling.innerText.slice(4);
-            newClient.微信2 =
-              clientBtn.firstChild.nextSibling.nextSibling.nextSibling.innerText.slice(
-                3
-              );
-            newClient.QQ2 =
-              clientBtn.firstChild.nextSibling.nextSibling.nextSibling.nextSibling.innerText.slice(
-                3
-              );
-            newClient.日期2 =
-              clientBtn.firstChild.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.innerText.slice(
-                5
-              );
-            newClient.时间2 =
-              clientBtn.firstChild.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.innerText.slice(
-                5
-              );
-          } else {
-            newClient.index = e.target.parentNode.getAttribute("index");
-            const clientBtn =
-              e.target.parentNode.parentNode.parentNode.parentNode.nextSibling
-                .nextSibling.firstChild.nextSibling.nextSibling;
-
-            if (clientBtn.nodeName === "#text") return;
-
-            settingName.value = clientBtn.firstChild.innerText.slice(3);
-            newClient.姓名 = clientBtn.firstChild.innerText.slice(3);
-            newClient.性别 =
-              clientBtn.firstChild.nextSibling.innerText.slice(-1);
-            newClient.手机号码 =
-              clientBtn.firstChild.nextSibling.nextSibling.innerText.slice(4);
-            newClient.微信 =
-              clientBtn.firstChild.nextSibling.nextSibling.nextSibling.innerText.slice(
-                3
-              );
-            newClient.QQ =
-              clientBtn.firstChild.nextSibling.nextSibling.nextSibling.nextSibling.innerText.slice(
-                3
-              );
-            newClient.日期 =
-              clientBtn.firstChild.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.innerText.slice(
-                5
-              );
-            newClient.时间 =
-              clientBtn.firstChild.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.innerText.slice(
-                5
-              );
-            newClient.姓名2 = clientBtn.firstChild.innerText.slice(3);
-            newClient.性别2 =
-              clientBtn.firstChild.nextSibling.innerText.slice(-1);
-            newClient.手机号码2 =
-              clientBtn.firstChild.nextSibling.nextSibling.innerText.slice(4);
-            newClient.微信2 =
-              clientBtn.firstChild.nextSibling.nextSibling.nextSibling.innerText.slice(
-                3
-              );
-            newClient.QQ2 =
-              clientBtn.firstChild.nextSibling.nextSibling.nextSibling.nextSibling.innerText.slice(
-                3
-              );
-            newClient.日期2 =
-              clientBtn.firstChild.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.innerText.slice(
-                5
-              );
-            newClient.时间2 =
-              clientBtn.firstChild.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.innerText.slice(
-                5
-              );
-          }
+      },
+      cancelEdit() {
+        DialogCancel(showEditDialog, editFormRef);
+      },
+      Edit(item) {
+        for (let i in editForm) {
+          editForm[i] = item[i];
+          editFormClone[i] = item[i];
         }
+        editForm.nameOld = item.name;
+        editFormClone.nameOld = item.name;
+        showEditDialog.value = true;
       },
       searchClient() {
         const functionBtn = document.getElementsByClassName("function");
@@ -1507,6 +1243,10 @@ export default {
       手机号码2: [{ validator: validatePhone, trigger: "blur" }],
       微信2: [{ validator: validateWeixin, trigger: "blur" }],
       QQ2: [{ validator: validateQQ, trigger: "blur" }],
+      name: [{ validator: validateName, trigger: "blur", required: true }],
+      phone: [{ validator: validatePhone, trigger: "blur" }],
+      weixin: [{ validator: validateWeixin, trigger: "blur" }],
+      qq: [{ validator: validateQQ, trigger: "blur" }],
     });
 
     const ReqHead = () => {
@@ -1678,6 +1418,9 @@ export default {
       ArrowRight,
       imgUrl,
       ReqHead,
+      showEditDialog,
+      editForm,
+      editFormRef,
     };
   },
 };
