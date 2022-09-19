@@ -1511,14 +1511,25 @@ export default {
 
     const ReqHead = () => {
       axios
-        .get(axios.baseURL + "/upload")
+        .get(axios.baseURL + "/upload", JSON.stringify({ currentUsername }))
         .then((data) => {
           if (data) {
-            imgUrl.value = "/img/head/" + data;
+            if (data === "no head") {
+              imgUrl.value = "img/defaultHead/beishangwa.jpg";
+              return;
+            }
+            imgUrl.value = "img/head/" + currentUsername + "/" + data;
           }
         })
         .catch((err) => {});
     };
+
+    window["watchUpdateHead"] = false;
+    Object.defineProperty(window, "watchUpdateHead", {
+      set(val) {
+        ReqHead();
+      },
+    });
 
     // 生命周期
     onMounted(() => {

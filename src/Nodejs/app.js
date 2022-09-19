@@ -1080,9 +1080,15 @@ for (let i of apiList) {
 app.get('/upload', function (req, res) {
     res.status(200)
 
-    const imgUrl = fs.readdirSync("public/img/head").join("")
+    let data = JSON.parse(req.query[0])
 
-    res.json(imgUrl)
+    fs.readdir("public/img/head/" + data.currentUsername, (err, files) => {
+        if (err) {
+            return res.json("no head")
+        }
+        const imgUrl = files.join("")
+        res.json(imgUrl)
+    })
 
 
 })
@@ -1096,8 +1102,11 @@ app.post('/upload/set', function (req, res) {
     }
 
     if (data.operation === "delete") {
-        fs.unlink("public/img/head/" + fs.readdirSync("public/img/head").join(""), (err) => {
-            res.json("Deleted successfully")
+        fs.unlink("public/img/head/" + data.currentUsername + "/" + fs.readdirSync("public/img/head/" + data.currentUsername).join(""), (err) => {
+            fs.rmdir("public/img/head/" + data.currentUsername, (err) => {
+                res.json("Deleted successfully")
+            })
+
         })
     }
 })
@@ -1111,15 +1120,39 @@ const server = app.listen(3000, function () {
 
 
 const httpServer = http.createServer((req, res) => {
+
     if (req.url === "/upload") {
         const form = new multiparty.Form({
-            uploadDir: 'public/img/head'
+            uploadDir: "public/img/head"
         })
-        form.parse(req)
-        form.on("file", (name, value) => {
-            console.log(name, value);
+
+        form.parse(req, (err, fields, files) => {
+            if (err) throw err
+
+            const currentUsername = fields.currentUsername[0]
+            fs.mkdir("public/img/head/" + currentUsername, () => {
+                fs.readdir("public/img/head", (err, files) => {
+                    if (err) throw err
+                    let fileName = ""
+                    for (let i in files) {
+                        if (files[i].indexOf(".") !== -1) {
+                            fileName = files[i]
+                        }
+                    }
+                    fs.rename("public/img/head/" + fileName, "public/img/head/" + currentUsername + "/" + fileName, (err) => {
+                        if (err) throw err
+                        res.writeHead(200, {
+                            "content-type": "application/x-www-form-urlencoded;charset:utf-8;",
+                            "Access-Control-Allow-Origin": "*"
+                        })
+                        res.end("upload success")
+                    })
+                })
+            })
         })
-        res.write("123")
+
+
+
     }
 
 })

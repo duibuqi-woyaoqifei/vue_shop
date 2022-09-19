@@ -18,6 +18,7 @@
     "element-plus": "^2.2.5",
     "eslint-define-config": "^1.5.1",
     "jsonwebtoken": "^8.5.1",
+    "mitt": "^3.0.0",
     "qs": "^6.10.5",
     "vite-plugin-inspect": "^0.5.0",
     "vue": "^3.2.13",
