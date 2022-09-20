@@ -142,10 +142,13 @@ export default {
     // 生命周期函数
     onMounted(() => {
       axios
-        .get(axios.baseURL + "/accountlist")
+        .get(
+          axios.baseURL + "/accountlist",
+          JSON.stringify({ operation: "getUsername" })
+        )
         .then((data) => {
           for (let i of data) {
-            mysqlUsername.push(i["username"]);
+            mysqlUsername.push(i);
           }
         })
         .catch((err) => {

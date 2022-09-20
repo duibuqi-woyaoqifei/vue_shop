@@ -93,65 +93,55 @@ export default {
             });
           // 请求登录接口
           await axios
-            .get(axios.baseURL + "/accountlist")
+            .get(axios.baseURL + "/accountlist", JSON.stringify(login_form))
             .then((data) => {
-              for (let i of data) {
-                if (i.username === login_form.username) {
-                  if (i.password === login_form.password) {
-                    // 是否保存用户名密码
-                    if (checked.value) {
-                      window.localStorage.setItem("checked", checked.value);
+              if (data === "ok") {
+                // 是否保存用户名密码
+                if (checked.value) {
+                  window.localStorage.setItem("checked", checked.value);
+                  window.localStorage.setItem("username", login_form.username);
+                  window.localStorage.setItem("password", login_form.password);
+                }
+                ElMessage.success({
+                  message: "登录成功！",
+                  showClose: true,
+                });
+                // 获取token
+                axios
+                  .post(
+                    axios.baseURL + "/token",
+                    JSON.stringify(login_form.username)
+                  )
+                  .then((data) => {
+                    // 保存token
+                    window.localStorage.setItem("token", data);
+                    // 记录当前用户
+                    if (
+                      window.localStorage.getItem("currentUsername") !==
+                      login_form.username
+                    ) {
                       window.localStorage.setItem(
-                        "username",
+                        "currentUsername",
                         login_form.username
                       );
-                      window.localStorage.setItem(
-                        "password",
-                        login_form.password
-                      );
                     }
-                    ElMessage.success({
-                      message: "登录成功！",
+                    router.push({
+                      name: "我的信息",
+                      path: "/home/personal-information",
+                      params: {
+                        // 路由守卫检测token
+                        token: window.localStorage.getItem("token"),
+                      },
+                    });
+                  })
+                  .catch((err) => {
+                    ElMessage({
+                      message: "获取token失败！",
+                      type: "error",
                       showClose: true,
                     });
-                    // 获取token
-                    axios
-                      .post(
-                        axios.baseURL + "/token",
-                        JSON.stringify(login_form.username)
-                      )
-                      .then((data) => {
-                        // 保存token
-                        window.localStorage.setItem("token", data);
-                        // 记录当前用户
-                        if (
-                          window.localStorage.getItem("currentUsername") !==
-                          login_form.username
-                        ) {
-                          window.localStorage.setItem(
-                            "currentUsername",
-                            login_form.username
-                          );
-                        }
-                        router.push({
-                          name: "我的信息",
-                          path: "/home/personal-information",
-                          params: {
-                            // 路由守卫检测token
-                            token: window.localStorage.getItem("token"),
-                          },
-                        });
-                      })
-                      .catch((err) => {
-                        ElMessage({
-                          message: "获取token失败！",
-                          type: "error",
-                          showClose: true,
-                        });
-                      });
-                    return;
-                  }
-                }
+                  });
+                return;
               }
               ElMessage({
                 message: "用户名或密码错误！",
