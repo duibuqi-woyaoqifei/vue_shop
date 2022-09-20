@@ -72,7 +72,7 @@ const ChangeImg = (file) => {
   formData.append("currentUsername", currentUsername);
 
   var xhr = new XMLHttpRequest();
-  xhr.open("POST", "http://47.96.21.73:3001/upload", true);
+  xhr.open("POST", axios.baseURL.slice(0, -1) + "1/upload", true);
 
   xhr.onload = function (data) {
     // 请求结束后，在此处写处理代码

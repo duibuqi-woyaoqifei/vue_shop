@@ -124,7 +124,10 @@ export default {
                         // 保存token
                         window.localStorage.setItem("token", data);
                         // 记录当前用户
-                        if (!window.localStorage.getItem("currentUsername")) {
+                        if (
+                          window.localStorage.getItem("currentUsername") !==
+                          login_form.username
+                        ) {
                           window.localStorage.setItem(
                             "currentUsername",
                             login_form.username

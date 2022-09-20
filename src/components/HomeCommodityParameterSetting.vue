@@ -29,7 +29,7 @@
       <el-button type="primary" size="large" @click="AddParameter"
         >添加参数</el-button
       >
-      <div class="MedusaTable commodityParameterSettingTables">
+      <el-scrollbar class="MedusaTable commodityParameterSettingTables">
         <el-table :data="currentTableData">
           <el-table-column type="expand">
             <template #default="scope">
@@ -60,7 +60,7 @@
             </template>
           </el-table-column>
         </el-table>
-      </div>
+      </el-scrollbar>
     </el-tab-pane>
     <el-tab-pane label="静态属性" name="properties" :disabled="IsBanTabs()"
       ><el-button type="primary" size="large" @click="AddParameter"
@@ -230,6 +230,7 @@ const deleteReq = reactive({
   Sets: Sets.SetCommodityParameterSetting,
   list: currentTableData,
   queryInfo: commodityParameterSettingQueryInfo,
+  currentUsername,
 });
 
 // 商品分类级联选择器
@@ -290,18 +291,30 @@ const AddParameterDialogSubmit = () => {
   const operation =
     currentTab.value === "parameter" ? "addParameter" : "addProperties";
 
-  DialogSubmit(
-    parameterForm,
-    operation,
-    {
-      Reqs: Reqs.ReqCommodityParameterSetting,
-      Sets: Sets.SetCommodityParameterSetting,
-      list: currentTableData,
-      queryInfo: commodityParameterSettingQueryInfo,
-      dialogSwitch: showAddParameterDialog,
-    },
-    parameterFormRef
-  );
+  new Promise((resolve, reject) => {
+    DialogSubmit(
+      parameterForm,
+      operation,
+      {
+        Reqs: Reqs.ReqCommodityParameterSetting,
+        Sets: Sets.SetCommodityParameterSetting,
+        list: currentTableData,
+        queryInfo: commodityParameterSettingQueryInfo,
+        dialogSwitch: showAddParameterDialog,
+      },
+      parameterFormRef,
+      resolve
+    );
+  }).then((data) => {
+    tagsReq.parent = GetTagParent();
+    tagsReq.total = currentTableData.value;
+
+    Reqs.ReqTags(tagsList, {
+      parent: tagsReq.parent,
+      currentUsername,
+      total: currentTableData.value,
+    });
+  });
 };
 const DialogTitle = () => {
   if (currentTab.value === "parameter") {
