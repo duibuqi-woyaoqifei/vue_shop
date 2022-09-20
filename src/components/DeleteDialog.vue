@@ -33,7 +33,7 @@ const props = defineProps({
 });
 
 const showDeleteDialog = ref(false);
-const {list} = toRefs(props.request)
+const { list } = toRefs(props.request);
 
 const DeleteCancel = () => {
   DialogCancel(showDeleteDialog);
@@ -49,9 +49,17 @@ const DeleteSubmit = () => {
     dialogSwitch: showDeleteDialog,
     queryInfo: {
       ...props.request,
+      list: undefined,
     },
   };
-  DialogSubmit(props.form, operation, request);
+
+  new Promise((resolve, reject) => {
+    DialogSubmit(props.form, operation, request, undefined, resolve);
+  }).then((data) => {
+    if (props.name) {
+      props.request.method();
+    }
+  });
 };
 
 // 暴露开关，添加标签属性ref接收

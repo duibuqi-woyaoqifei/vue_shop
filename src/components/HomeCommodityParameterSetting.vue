@@ -229,8 +229,7 @@ const deleteReq = reactive({
   Reqs: Reqs.ReqCommodityParameterSetting,
   Sets: Sets.SetCommodityParameterSetting,
   list: currentTableData,
-  queryInfo: commodityParameterSettingQueryInfo,
-  currentUsername,
+  ...commodityParameterSettingQueryInfo,
 });
 
 // 商品分类级联选择器
@@ -355,10 +354,10 @@ const EditParameterDialogSubmit = () => {
 };
 // 删除参数属性对话框
 const DeleteParameter = (data) => {
-  console.log(currentTableData);
   parameterForm.oldName = data.row.name;
   parameterForm.index = data.$index;
   parameterForm.currentClassification = GetClassification();
+  deleteReq.method = ClassificationChange;
   deleteDialogRef.value.showDeleteDialog = true;
 };
 // 动态标签
